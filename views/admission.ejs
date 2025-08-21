@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admission</title>
+    <link rel="stylesheet" href="admission.css" />
+  </head>
+  <body>
+    <h2>Darul Uloom Charbari (Gazarikandi) Madrassa</h2>
+    <h2 class="form-title">Student Admission Form</h2>
+
+    <form action="/admission" method="POST" class="admission-form">
+
+      <div class="form">
+        <label for="old">Old Student:</label>
+        <input type="checkbox" id="old" name="old" />
+      </div>
+
+      <div class="form">
+        <label for="new">New Student:</label>
+        <input type="checkbox" id="new" name="new" />
+      </div>
+
+      <div class="form">
+        <label for="class">Class:</label>
+        <input type="text" id="class" name="class" required />
+      </div>
+      <div class="form">
+        <label for="prevClass">Previous Class:</label>
+        <input type="text" id="prevClass" name="prevClass" required />
+      </div>
+
+      <div class="form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form">
+        <label for="sonOf">Father's Name:</label>
+        <input type="text" id="sonOf" name="sonOf" required />
+      </div>
+
+      <!-- পরিবর্তন: dob -> dateOfbrith -->
+      <div class="form">
+        <label for="dateOfbrith">Date of Birth:</label>
+        <input type="date" id="dateOfbrith" name="dateOfbrith" required />
+      </div>
+      <div class="form">
+        <label for="vill">Village:</label>
+        <input type="text" id="vill" name="vill" required />
+      </div>
+      <div class="form">
+        <label for="post">Post:</label>
+        <input type="text" id="post" name="post" required />
+      </div>
+      <!-- পরিবর্তন: policeStation -> police -->
+      <div class="form">
+        <label for="police">Police Station:</label>
+        <input type="text" id="police" name="police" required />
+      </div>
+      <div class="form">
+        <label for="district">District:</label>
+        <input type="text" id="district" name="district" required />
+      </div>
+      <div class="form">
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required />
+      </div>
+
+      <div class="form">
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required />
+      </div>
+      <div class="form">
+        <label for="pin">PIN:</label>
+        <input type="text" id="pin" name="pin" required />
+      </div>
+
+      <div class="form">
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required />
+      </div>
+      <div class="form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="form">
+        <label for="image">Image URL:</label>
+        <input type="text" id="image" name="image" required />
+      </div>
+      <div class="form">
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+<!-- javascript for checkbox behavior -->
+    <script>
+      document.getElementById("old").addEventListener("change", function() {
+        if (this.checked) {
+          document.getElementById("new").checked = false;
+        }
+      });
+
+      document.getElementById("new").addEventListener("change", function() {
+        if (this.checked) {
+          document.getElementById("old").checked = false;
+        }
+      });
+    </script>
+  </body>
+</html>

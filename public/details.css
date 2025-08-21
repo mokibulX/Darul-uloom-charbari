@@ -1,0 +1,19 @@
+td, tr {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+h2 {
+    text-align: center;
+
+}
+
+h3 {
+    text-align: center;
+    margin: 12px 0;
+}

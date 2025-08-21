@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+   <link rel="stylesheet" href="/css/details.css">
+    <link rel="stylesheet" href="/details.css">
+<!-- <style>
+    table, td {
+        border: 1px solid black;
+    }
+</style> -->
+
+</head>
+<body>
+    <h2>Student details</h2>
+    <table>
+        <tr>
+            <td colspan="2"><h3>Student Information</h3></td>
+        </tr>
+        <tr>
+            <td>Old Student:</td>
+            <td><%= user.old %></td>
+        </tr>
+        <tr>
+            <td>New Student:</td>
+            <td><%= user.new %></td>
+        </tr>
+        <tr>
+            <td>
+                Id : 
+            </td>
+            <td><%= user._id %></td>
+
+        </tr>
+        
+        <tr>
+            <td>Name:</td>
+            <td><%= user.name %></td>
+        </tr>
+        
+        <tr >
+            <td>Father's Name:</td>
+            <td><%= user.sonOf %></td>
+        </tr>
+       
+        <tr >
+            <td>Date of Birth:</td>
+            <td><%= user.dateOfbrith %></td>
+        </tr>
+        <tr >
+            <td>Village:</td>
+            <td><%= user.vill %></td>
+        </tr>
+        
+        <tr >
+            <td>Post:</td>
+            <td><%= user.post %></td>
+        </tr>
+       
+        <tr>
+            <td>Police Station:</td>
+            <td><%= user.police %></td>
+        </tr>
+        <tr>
+            <td>District:</td>
+            <td><%= user.distric %></td>
+        </tr>
+       
+        <tr>
+            <td>State:</td>
+            <td><%= user.state %></td>
+        </tr>
+        <tr>
+            <td>Country:</td>
+            <td><%= user.country %></td>
+        </tr>
+       
+        <tr>
+            <td>PIN:</td>
+            <td><%= user.pin %></td>
+        </tr>
+       
+        <tr>
+            <td>Phone:</td>
+            <td><%= user.phone %></td>
+        </tr>
+
+        <tr>
+            <td>Email:</td>
+            <td><%= user.email %></td>
+        </tr>
+
+      <tr>
+          <td>Image:</td>
+          <td><img src="<%= user.image %>" alt="<%= user.name %>"></td>
+      </tr>
+
+    </table>
+        
+    
+</body>
+</html>

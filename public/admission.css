@@ -1,0 +1,66 @@
+
+.admission-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 60%;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.781);
+    padding: 20px;
+    border-radius: 12px;
+}
+.admission-form .form {
+    flex: 1 1 calc(50% - 16px);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.admission-form button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width:fit-content ;
+    transition: .5s ease;
+}
+
+/* mobile responsiveness */
+@media (max-width: 768px) {
+    .admission-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.admission-form button:hover {
+    background-color: #1020b1;
+    box-shadow: 0 0 20px rgba(224, 11, 111, 0.63);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+/* Form Title color lighting effect */
+.form-title {
+    color: #1020b1;
+    text-shadow: 0 0 10px rgba(16, 32, 177, 0.5), 0 0 20px rgba(16, 32, 177, 0.3);
+}
