@@ -1,99 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admission</title>
-    <link rel="stylesheet" href="admission.css" />
-  </head>
+    <%- include('header') %>
+
   <body>
-    <h2>Darul Uloom Charbari (Gazarikandi) Madrassa</h2>
-    <h2 class="form-title">Student Admission Form</h2>
+    <div class="col-12">
+  <h3 class="text-center mb-4">Darul Uloom Charbari (Gazarikandi) Madrassa</h3>
+</div>
+   <div class="col-12">
+  <h3 class="text-center mb-4">Admission Form</h3>
+</div>
+     
+    <div  class="container d-flex justify-content-center align-items-center min-vh-100">
 
-    <form action="/admission" method="POST" class="admission-form">
 
-      <div class="form">
-        <label for="old">Old Student:</label>
-        <input type="checkbox" id="old" name="old" />
+   
+    <form action="/admission" method="POST" class="row g-3 shadow p-4 rounded bg-light" style="max-width: 600px; width: 100%">
+
+      <div class="form-check">
+        <label for="form-check-label">Old Student:</label>
+        <input type="checkbox" id="old" name="old" class="form-check-input" />
       </div>
 
-      <div class="form">
-        <label for="new">New Student:</label>
-        <input type="checkbox" id="new" name="new" />
+      <div class="form-check">
+        <label for="form-check-label">New Student:</label>
+        <input type="checkbox" id="new" name="new" class="form-check-input" />
       </div>
 
-      <div class="form">
-        <label for="class">Class:</label>
-        <input type="text" id="class" name="class" required />
+      <div class="col-md-6">
+        <label for="class" class="form-label">Class:</label>
+        <input type="text" id="class" name="class"  class="form-control" required />
       </div>
-      <div class="form">
-        <label for="prevClass">Previous Class:</label>
-        <input type="text" id="prevClass" name="prevClass" required />
+      <div class="col-md-6">
+        <label for="prevClass" class="form-label">Previous Class:</label>
+        <input type="text" id="prevClass" name="prevClass" class="form-control" required />
       </div>
 
-      <div class="form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="sonOf">Father's Name:</label>
-        <input type="text" id="sonOf" name="sonOf" required />
+      <div class="col-md-6">
+        <label for="sonOf" class="form-label">Father's Name:</label>
+        <input type="text" id="sonOf" name="sonOf" class="form-control" required />
       </div>
 
       <!-- পরিবর্তন: dob -> dateOfbrith -->
-      <div class="form">
-        <label for="dateOfbrith">Date of Birth:</label>
-        <input type="date" id="dateOfbrith" name="dateOfbrith" required />
+      <div class="col-md-6">
+        <label for="dateOfbrith" class="form-label">Date of Birth:</label>
+        <input type="date" id="dateOfbrith" name="dateOfbrith" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="vill">Village:</label>
-        <input type="text" id="vill" name="vill" required />
+      <div class="col-md-6">
+        <label for="vill" class="form-label">Village:</label>
+        <input type="text" id="vill" name="vill" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="post">Post:</label>
-        <input type="text" id="post" name="post" required />
+      <div class="col-md-6">
+        <label for="post" class="form-label">Post:</label>
+        <input type="text" id="post" name="post" class="form-control" required />
       </div>
       <!-- পরিবর্তন: policeStation -> police -->
-      <div class="form">
-        <label for="police">Police Station:</label>
-        <input type="text" id="police" name="police" required />
+      <div class="col-md-6">
+        <label for="police" class="form-label">Police Station:</label>
+        <input type="text" id="police" name="police" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="district">District:</label>
-        <input type="text" id="district" name="district" required />
+      <div class="col-md-6">
+        <label for="district" class="form-label">District:</label>
+        <input type="text" id="district" name="district" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" required />
-      </div>
-
-      <div class="form">
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" required />
-      </div>
-      <div class="form">
-        <label for="pin">PIN:</label>
-        <input type="text" id="pin" name="pin" required />
+      <div class="col-md-6">
+        <label for="state" class="form-label">State:</label>
+        <input type="text" id="state" name="state" class="form-control" required />
       </div>
 
-      <div class="form">
-        <label for="phone">Phone:</label>
-        <input type="text" id="phone" name="phone" required />
+      <div class="col-md-6">
+        <label for="country" class="form-label">Country:</label>
+        <input type="text" id="country" name="country" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
+      <div class="col-md-6">
+        <label for="pin" class="form-label">PIN:</label>
+        <input type="text" id="pin" name="pin" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="image">Image URL:</label>
-        <input type="text" id="image" name="image" required />
+
+      <div class="col-md-6">
+        <label for="phone" class="form-label">Phone:</label>
+        <input type="text" id="phone" name="phone" class="form-control" required />
       </div>
-      <div class="form">
-        <label for="age">Age:</label>
-        <input type="text" id="age" name="age" required />
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required />
       </div>
-      <button type="submit">Submit</button>
+      <div class="col-md-6">
+        <label for="image" class="form-label">Image URL:</label>
+        <input type="text" id="image" name="image" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="age" class="form-label">Age:</label>
+        <input type="text" id="age" name="age" class="form-control" required />
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+     </div>
 <!-- javascript for checkbox behavior -->
     <script>
       document.getElementById("old").addEventListener("change", function() {
