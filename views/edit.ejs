@@ -1,0 +1,100 @@
+<%- include('header') %>
+<body>
+
+    <h2 class="text-center">Edit User</h2>
+
+      
+    <div  class="container d-flex justify-content-center align-items-center min-vh-100">
+
+
+   <form action="/edit/<%= user._id %>" method="POST" class="row g-3 shadow p-4 rounded bg-light" style="max-width: 600px; width: 100%">
+
+      <div class="form-check">
+        <label for="form-check-label">Old Student:</label>
+        <input type="checkbox" id="old" name="old" class="form-check-input" value="<%= user.old ? 'on' : 'off' %>" <%= user.old ? 'checked' : '' %> />
+      </div>
+
+      <div class="form-check">
+        <label for="form-check-label">New Student:</label>
+        <input type="checkbox" id="new" name="new" class="form-check-input" value="<%= user.new ? 'on' : 'off' %>" <%= user.new ? 'checked' : '' %> />
+      </div>
+
+      <div class="col-md-6">
+        <label for="class" class="form-label">Class:</label>
+        <input type="text" id="class" name="class" class="form-control" value="<%= user.class %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="prevClass" class="form-label">Previous Class:</label>
+        <input type="text" id="prevClass" name="prevClass" class="form-control" value="<%= user.prevClass %>" required />
+      </div>
+
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" value="<%= user.name %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="sonOf" class="form-label">Father's Name:</label>
+        <input type="text" id="sonOf" name="sonOf" class="form-control" value="<%= user.sonOf %>" required />
+      </div>
+
+      <!-- পরিবর্তন: dob -> dateOfbrith -->
+      <div class="col-md-6">
+        <label for="dateOfbrith" class="form-label">Date of Birth:</label>
+        <input type="date" id="dateOfbrith" name="dateOfbrith" class="form-control" value="<%= user.dateOfbrith %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="vill" class="form-label">Village:</label>
+        <input type="text" id="vill" name="vill" class="form-control" value="<%= user.vill %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="post" class="form-label">Post:</label>
+        <input type="text" id="post" name="post" class="form-control" value="<%= user.post %>" required />
+      </div>
+      <!-- পরিবর্তন: policeStation -> police -->
+      <div class="col-md-6">
+        <label for="police" class="form-label">Police Station:</label>
+        <input type="text" id="police" name="police" class="form-control" value="<%= user.police %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="district" class="form-label">District:</label>
+        <input type="text" id="district" name="district" class="form-control" value="<%= user.district %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="state" class="form-label">State:</label>
+        <input type="text" id="state" name="state" class="form-control" value="<%= user.state %>" required />
+      </div>
+
+      <div class="col-md-6">
+        <label for="country" class="form-label">Country:</label>
+        <input type="text" id="country" name="country" class="form-control" value="<%= user.country %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="pin" class="form-label">PIN:</label>
+        <input type="text" id="pin" name="pin" class="form-control" value="<%= user.pin %>" required />
+      </div>
+
+      <div class="col-md-6">
+        <label for="phone" class="form-label">Phone:</label>
+        <input type="text" id="phone" name="phone" class="form-control" value="<%= user.phone %>" required />
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>" required />
+      </div>
+      <div class="col-md-12">
+        <label for="image" class="form-label">Image URL:</label>
+        <input type="text" id="image" name="image" class="form-control" value="<%= user.image %>" required />
+      </div>
+      <div class="col-md-4">
+        <label for="age" class="form-label">Age:</label>
+        <input type="text" id="age" name="age" class="form-control" value="<%= user.age %>" required />
+      </div>
+      <div class="col-md-8">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" name="password" class="form-control" value="<%= user.password %>" required />
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+     </div>
+</body>
+</html>

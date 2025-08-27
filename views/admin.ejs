@@ -1,0 +1,39 @@
+<%- include('header') %>
+<body>
+  <div class="container mt-4">
+    <h2 class="text-center mb-4">Admin Panel - Student Details</h2>
+    <table class="table table-bordered table-striped text-center">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Class</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %>
+          <tr class="<%= user.status === 'pending' ? 'table-warning' : 'table-success' %>">
+            <td><a href="/users/<%= user._id %>"><%= user.name %></a></td>
+            <td><%= user.class %></td>
+            <td><%= user.phone %></td>
+            <td><%= user.status %></td>
+            <td>
+              <% if (user.status === "pending") { %>
+                <form action="/accept/<%= user._id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                </form>
+              <% } %>
+              <a href="/edit/<%= user._id %>" class="btn btn-warning btn-sm">Edit</a>
+              <form action="/delete/<%= user._id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

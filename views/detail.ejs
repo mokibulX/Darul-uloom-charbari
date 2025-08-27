@@ -71,12 +71,17 @@
                     <td><%= user.email %></td>
                 </tr>
                 <tr>
+                    <td>Password:</td>
+                    <td><%= user.password %></td>
+                </tr>
+                <tr>
                     <td>Image:</td>
                     <td>
                         <img src="<%= user.image %>" alt="<%= user.name %>" class="img-fluid rounded" style="max-height:150px;">
                     </td>
                 </tr>
             </table>
+            <button class="btn btn-primary" onclick="window.print()">Print</button>
         </div>
     </div>
 </body>

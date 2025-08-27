@@ -85,8 +85,16 @@ let userSchema = new Schema({
   age: {
     type: Number,
     required: true
+  }, 
+  password: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ["pending", "accepted"],  ///value for pending 
+    default: "pending"
   }
-
 });
 
 
