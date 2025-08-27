@@ -1,0 +1,13 @@
+<%- include('header') %>
+<body> 
+    <div class="d-flex justify-content-center min-vh-50 ">
+  <div class="card p-4 shadow-lg" style="max-width: 400px; border-radius: 15px;">
+    <h4 class="text-center mb-3">Track Your Application</h4>
+    <form action="/track" method="POST">
+      <input type="text" name="applicationId" class="form-control mb-3" placeholder="Enter Application ID" required>
+      <button class="btn btn-primary w-100">Check Status</button>
+    </form>
+  </div>
+  </div>
+</body>
+</html>

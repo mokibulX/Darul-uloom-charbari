@@ -1,87 +1,95 @@
 <%- include('header') %>
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="w-100" style="max-width: 700px;">
-            <h2 class="text-center mb-4">Darul Uloom Charbari (Gazarikandi) Madrassa</h2>
+        <div class="card shadow-lg w-100" style="max-width: 800px; border-radius: 15px;">
+            
+            <div class="card-header text-center bg-primary text-white rounded-top">
+                <h2 class="mb-0">Darul Uloom Charbari (Gazarikandi) Madrassa</h2>
+                <small>Student Information Details</small>
+            </div>
 
-            <table class="table table-bordered table-striped text-center">
-                <tr>
-                    <th colspan="2" class="text-center bg-light">
-                        <h3>Student Information</h3>
-                    </th>
-                </tr>
-                <tr>
-                    <td>Old Student:</td>
-                    <td><%= user.old %></td>
-                </tr>
-                <tr>
-                    <td>New Student:</td>
-                    <td><%= user.new %></td>
-                </tr>
-                <tr>
-                    <td>Id:</td>
-                    <td><%= user._id %></td>
-                </tr>
-                <tr>
-                    <td>Name:</td>
-                    <td><%= user.name %></td>
-                </tr>
-                <tr>
-                    <td>Father's Name:</td>
-                    <td><%= user.sonOf %></td>
-                </tr>
-                <tr>
-                    <td>Date of Birth:</td>
-                    <td><%= user.dateOfbrith %></td>
-                </tr>
-                <tr>
-                    <td>Village:</td>
-                    <td><%= user.vill %></td>
-                </tr>
-                <tr>
-                    <td>Post:</td>
-                    <td><%= user.post %></td>
-                </tr>
-                <tr>
-                    <td>Police Station:</td>
-                    <td><%= user.police %></td>
-                </tr>
-                <tr>
-                    <td>District:</td>
-                    <td><%= user.distric %></td>
-                </tr>
-                <tr>
-                    <td>State:</td>
-                    <td><%= user.state %></td>
-                </tr>
-                <tr>
-                    <td>Country:</td>
-                    <td><%= user.country %></td>
-                </tr>
-                <tr>
-                    <td>PIN:</td>
-                    <td><%= user.pin %></td>
-                </tr>
-                <tr>
-                    <td>Phone:</td>
-                    <td><%= user.phone %></td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td><%= user.email %></td>
-                </tr>
-                <tr>
-                    <td>Password:</td>
-                    <td><%= user.password %></td>
-                </tr>
-                <tr>
-                    <td>Image:</td>
-                    <td>
-                        <img src="<%= user.image %>" alt="<%= user.name %>" class="img-fluid rounded" style="max-height:150px;">
-                    </td>
-                </tr>
-            </table>
-            <button class="btn btn-primary" onclick="window.print()">Print</button>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                   <img src="<%= user.image %>" alt="<%= user.name %>" class="img-fluid" style="max-height:200px; border-radius: 12px;">
+                    
+                    <h3 class="mt-3"><%= user.name %></h3>
+                    
+                    
+                </div>
+
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Student Type</th>
+                            <td>
+                                <% if(user.old){ %>
+                                    <span class="badge bg-success px-3 py-2">Old Student</span>
+                                <% } %>
+                                <% if(user.new){ %>
+                                    <span class="badge bg-info px-3 py-2">New Student</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <td><%= user.name %></td>
+                        </tr>
+                        <tr>
+                            <th>Father's Name</th>
+                            <td><%= user.sonOf %></td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth</th>
+                            <td><%= user.dateOfbrith %></td>
+                        </tr>
+                        <tr>
+                            <th>Village</th>
+                            <td><%= user.vill %></td>
+                        </tr>
+                        <tr>
+                            <th>Post</th>
+                            <td><%= user.post %></td>
+                        </tr>
+                        <tr>
+                            <th>Police Station</th>
+                            <td><%= user.police %></td>
+                        </tr>
+                        <tr>
+                            <th>District</th>
+                            <td><%= user.distric %></td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td><%= user.state %></td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td><%= user.country %></td>
+                        </tr>
+                        <tr>
+                            <th>PIN</th>
+                            <td><%= user.pin %></td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td><%= user.phone %></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td><%= user.email %></td>
+                        </tr>
+                        <tr>
+                            <th>Password</th>
+                            <td><%= user.password %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer text-center">
+                <a href="/idcard/<%= user._id %>" class="btn btn-primary">🖨 Print Id Card</a>
+                <a href="/" class="btn btn-secondary">🏠 Home</a>
+            </div>
         </div>
     </div>
 </body>

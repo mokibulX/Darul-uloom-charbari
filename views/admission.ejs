@@ -12,17 +12,13 @@
 
 
    
-    <form action="/admission" method="POST" class="row g-3 shadow p-4 rounded bg-light" style="max-width: 600px; width: 100%">
+    <form action="/admission" method="POST" class="row g-3 shadow p-4 rounded bg-light" style="max-width: 600px; width: 100%" enctype="multipart/form-data">
 
-      <div class="form-check">
-        <label for="form-check-label">Old Student:</label>
-        <input type="checkbox" id="old" name="old" class="form-check-input" />
-      </div>
-
-      <div class="form-check">
-        <label for="form-check-label">New Student:</label>
-        <input type="checkbox" id="new" name="new" class="form-check-input" />
-      </div>
+       <label class="form-label">Student Type:</label>
+    <select name="type" class="form-select">
+    <option value="new">New</option>
+    <option value="old">Old</option>
+     </select><br>
 
       <div class="col-md-6">
         <label for="class" class="form-label">Class:</label>
@@ -86,10 +82,6 @@
         <label for="email" class="form-label">Email:</label>
         <input type="email" id="email" name="email" class="form-control" required />
       </div>
-      <div class="col-md-12">
-        <label for="image" class="form-label">Image URL:</label>
-        <input type="text" id="image" name="image" class="form-control" required />
-      </div>
       <div class="col-md-4">
         <label for="age" class="form-label">Age:</label>
         <input type="text" id="age" name="age" class="form-control" required />
@@ -97,6 +89,10 @@
       <div class="col-md-8">
         <label for="password" class="form-label">Password:</label>
         <input type="password" id="password" name="password" class="form-control" required />
+      </div>
+      <div class="col-md-12">
+         <label>Photo:</label>
+       <input type="file" name="image" accept="image/*" class="form-control" required /><br>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>

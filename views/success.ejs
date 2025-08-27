@@ -1,0 +1,26 @@
+<%- include('header') %>
+<body>
+  <div class="d-flex justify-content-center" style="margin-top: 20px;">
+    <div class="card p-4 shadow-lg" style="max-width: 500px; min-height: 350px; border-radius: 15px;">
+      <div class="mb-4">
+        <span style="font-size: 3rem;">✅</span>
+      </div>
+      <h2 class="text-success fw-bold mb-3">Form Submitted Successfully</h2>
+      <p class="fs-5 text-muted">
+        Your admission form has been submitted and is currently 
+        <span class="fw-bold text-warning">pending approval</span>.
+      </p>
+
+      <% if (typeof applicationId !== "undefined") { %>
+        <div class="alert alert-info mt-4" style="border-radius: 12px;">
+          <h5 class="mb-1">📌 Tracking ID</h5>
+          <span class="fw-bold text-dark"><%= applicationId %></span>
+          <p class="small text-muted mb-0">Use this ID to check your admission status later.</p>
+        </div>
+      <% } %>
+
+      <a href="/" class="btn btn-primary mt-4 px-4 py-2" style="border-radius: 10px;">Go to Home</a>
+    </div>
+  </div>
+</body>
+</html>

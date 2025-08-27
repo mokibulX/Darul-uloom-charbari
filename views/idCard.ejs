@@ -1,0 +1,94 @@
+ <%- include('header') %>
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    .id-card {
+      width: 3.375in;   /* standard ID card width */
+      height: 2.125in;  /* standard ID card height */
+      border: 1px solid #000;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      position: relative;
+      padding: 6px;
+      font-size: 10px;
+    }
+    .id-header {
+      background: #198754;
+      color: white;
+      text-align: center;
+      padding: 2px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .id-photo {
+      width: 0.9in;
+      height: 1.1in;
+      border: 1px solid #000;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+    .seal {
+      width: 35px;
+      opacity: 0.5;
+    }
+    .signature {
+      border-top: 1px solid #000;
+      font-size: 9px;
+      line-height: 1;
+    }
+    @media print {
+      body { background: none; }
+      .print-btn { display: none; }
+      .id-card { 
+        box-shadow: none;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body >
+
+  <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+
+  <!-- Card -->
+  <div class="id-card shadow">
+    <!-- Header -->
+    <div class="id-header">
+      Darul Uloom Charbari (Gazarikandi)
+    </div>
+
+    <!-- Body -->
+    <div class="d-flex mt-1">
+      <div class="flex-grow-1 pe-1">
+        <p class="mb-0"><b>Name:</b> <%= user.name %></p>
+        <p class="mb-0"><b>Father:</b> <%= user.sonOf %></p>
+        <p class="mb-0"><b>Status:</b> <%= user.old === "yes" ? "Old" : "New" %></p>
+        <p class="mb-0"><b>Issue:</b> <%= new Date().toLocaleDateString() %></p>
+        <p class="mb-0"><b>Expiry:</b> <%= new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString() %></p>
+      </div>
+      <div>
+        <img src="<%= user.image %>" class="id-photo" alt="Student Photo">
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="d-flex justify-content-between align-items-end mt-1">
+      <img src="/images/seal.png" class="seal" alt="Seal">
+      <div class="text-center signature">
+        <img src="/images/signature.png" alt="Signature" style="width:50px; height:auto;"><br>
+        Head Teacher
+      </div>
+    </div>
+  </div>
+    <!-- Print Button -->
+  <div class="print-btn mt-3">
+    <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print ID Card</button>
+  </div>
+  </div>
+
+
+
+</body>
+</html>
