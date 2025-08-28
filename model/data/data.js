@@ -12,7 +12,7 @@ let userSchema = new Schema({
   vill: { type: String, required: true },
   post: { type: String },
   police: { type: String, required: true },
-  district: { type: String, required: true },
+  distric: { type: String, required: true },
   state: { type: String, required: true },
   country: { type: String, required: true },
   pin: { type: Number, required: true },
@@ -31,9 +31,14 @@ let userSchema = new Schema({
     required: true,
     unique: true,
   },
+  Date: { type: Date, default: Date.now },
+  payment: {
+    type: String,
+    enum: ["online", "offline"],
+    required: true
+  },
+   amount: { type: Number, required: true },
 });
-
-// 👇 এভাবে লিখুন যাতে পুনরায় declare না হয়
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 module.exports = User;

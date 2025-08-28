@@ -22,13 +22,17 @@
                         <tr>
                             <th>Student Type</th>
                             <td>
-                                <% if(user.old){ %>
-                                    <span class="badge bg-success px-3 py-2">Old Student</span>
+                                <% if(user.type === "old"){ %>
+                                    <span class="badge bg-success px-3 py-2">Old Student <%= user.type %></span>
                                 <% } %>
-                                <% if(user.new){ %>
-                                    <span class="badge bg-info px-3 py-2">New Student</span>
+                                <% if(user.type === "new"){ %>
+                                    <span class="badge bg-info px-3 py-2">New Student <%= user.type %></span>
                                 <% } %>
                             </td>
+                        </tr>
+                        <tr>
+                            <th>Class</th>
+                            <td><%= user.class %></td>
                         </tr>
                         <tr>
                             <th>Name</th>
@@ -75,8 +79,19 @@
                             <td><%= user.phone %></td>
                         </tr>
                         <tr>
+                             <th>Admission Date: </th> 
+                             <td><%= new Date(user.date).toLocaleString("en-IN", {
+                               day: "2-digit", month: "2-digit", year: "numeric",
+                                 hour: "2-digit", minute: "2-digit", hour12: true
+                              }) %></td>
+                        </tr>
+                        <tr>
                             <th>Email</th>
                             <td><%= user.email %></td>
+                        </tr>
+                        <tr>
+                            <th>Amount</th>
+                            <td><%= user.amount %></td>
                         </tr>
                         <tr>
                             <th>Password</th>

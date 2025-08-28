@@ -106,15 +106,26 @@ app.get("/admission", (req, res) => {
 });
 
 // Admission submit
-// Admission submit
 app.post("/admission", upload.single("image"), async (req, res) => {
   try {
     let userData = req.body;
-    userData.applicationId = "APP-" + Date.now(); // unique Application ID
-    userData.status = "pending"; // default status
-    // "public" শব্দটি বাদ দিয়ে সংরক্ষণ করুন
+
+    // Unique Application ID & default status
+    userData.applicationId = "APP-" + Date.now();
+    userData.status = "pending";
+
+    // Image path ঠিক করা
     userData.image = req.file.path.replace("public", "");
 
+    // ----- Amount Handle -----
+    let amount = 0;
+    if (req.body.payment === "offline") {
+      userData.amount = req.body.amount;
+    } else if (req.body.payment === "online") {
+      userData.amount = 700; // Online fixed fee
+    }
+
+    // ----- Save to DB -----
     let newUser = new User(userData);
     await newUser.save();
 
@@ -126,6 +137,9 @@ app.post("/admission", upload.single("image"), async (req, res) => {
     res.send("Error submitting form: " + err.message);
   }
 });
+
+
+
 
 // Track form
 app.get("/track", (req, res) => {
