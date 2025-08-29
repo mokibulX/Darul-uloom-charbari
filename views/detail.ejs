@@ -19,6 +19,17 @@
 
                 <table class="table table-bordered table-striped">
                     <tbody>
+                       <tr>
+             <th>Admission Conditions</th>
+                <td>
+             <% if (user.agreeAll) { %>
+           <span class="badge bg-success">Accepted</span>
+          <% } else { %>
+             <span class="badge bg-danger">Not Accepted</span>
+              <% } %>
+            </td>
+             </tr>
+
                         <tr>
                             <th>Student Type</th>
                             <td>

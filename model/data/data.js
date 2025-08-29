@@ -38,6 +38,7 @@ let userSchema = new Schema({
     required: true
   },
    amount: { type: Number, required: true },
+   agreeAll: { type: Boolean, required: true },
 });
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 

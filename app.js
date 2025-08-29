@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
-const User = require("./model/data/data");   // ✅ শুধু একবার রাখা হলো
+const User = require("./model/data/data");  
 require("dotenv").config();
 const session = require("express-session");
 const multer = require("multer");
@@ -113,7 +113,7 @@ app.post("/admission", upload.single("image"), async (req, res) => {
     // Unique Application ID & default status
     userData.applicationId = "APP-" + Date.now();
     userData.status = "pending";
-
+   req.body.agreeAll = req.body.agreeAll === "true";  
     // Image path ঠিক করা
     userData.image = req.file.path.replace("public", "");
 
@@ -136,6 +136,12 @@ app.post("/admission", upload.single("image"), async (req, res) => {
     console.error(err);
     res.send("Error submitting form: " + err.message);
   }
+});
+
+
+///admission conditions
+app.get("/admission/conditions", (req, res) => {
+  res.render("admissionRules");
 });
 
 
@@ -206,9 +212,21 @@ app.get("/edit/:id", isAdmin, async (req, res) => {
   res.render("edit", { user });
 });
 
-app.post("/edit/:id", isAdmin, async (req, res) => {
-  await User.findByIdAndUpdate(req.params.id, req.body);
-  res.redirect("/admin");
+app.post("/edit/:id", isAdmin, upload.single("image"), async (req, res) => {
+  try {
+    let updateData = { ...req.body };
+
+    // যদি নতুন ছবি আপলোড করা হয়
+    if (req.file) {
+      updateData.image = req.file.path.replace("public", "");
+    }
+
+    await User.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    res.redirect("/admin");
+  } catch (err) {
+    console.error("Error updating user:", err);
+    res.send("Update failed!");
+  }
 });
 
 // Delete

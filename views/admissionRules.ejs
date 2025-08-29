@@ -1,0 +1,115 @@
+<%- include('header') %>
+  <style>
+    body { background: #f8f9fa; font-family: "Segoe UI", sans-serif; }
+    h2 { font-weight: bold; }
+    .rule-box {
+      border-left: 5px solid #198754;
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .rule-num { font-weight: bold; color: #198754; }
+    .options { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <h2 class="text-center mb-4">Admission Rules & Regulations</h2>
+
+    <% const rules = [
+      "The filling of form must be clear and unsuspicious...",
+      "Students must be present on time. Mobile phones are strictly prohibited...",
+      "Non-local residents must take permission from the Madrasa authority...",
+      "Madrasa Baharul Uloom is a religious and ethical institute...",
+      "Students found visiting fairs or cinema will be expelled.",
+      "Namaaz with congregation must be offered on proper time.",
+      "Teachers, Madrasa authorities, and Islamic scholars must be respected.",
+      "Discipline must be maintained, and quarrels are prohibited.",
+      "Students must stay only in the allotted place.",
+      "No guest or outsider can stay with you without permission.",
+      "Students are not allowed to go to other rooms at night.",
+      "All rules including those of marriage and conduct must be followed.",
+      "Any false statement may lead to cancellation of admission.",
+      "Minimum attendance requirement: 75% annually...",
+      "Students must maintain neat dress and avoid smoking.",
+      "The management has full right to take action against absenteeism."
+    ]; %>
+
+    <% rules.forEach((rule, index) => { %>
+      <div class="rule-box">
+        <span class="rule-num"><%= index+1 %>. </span> <%= rule %>
+        <div class="options">
+          <label class="me-3">
+            <input type="radio" name="rule<%= index %>" value="agree"> ✔️ Agree
+          </label>
+          <label>
+            <input type="radio" name="rule<%= index %>" value="disagree"> ❌ Disagree
+          </label>
+        </div>
+      </div>
+    <% }) %>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-success">Submit Agreement</button>
+    </div>
+  </div>
+  <style>
+    body { background: #f8f9fa; font-family: "Nirmala UI", "Segoe UI", sans-serif; }
+    h2 { font-weight: bold; }
+    .rule-box {
+      border-left: 5px solid #0d6efd;
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .rule-num { font-weight: bold; color: #0d6efd; }
+    .options { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <h2 class="text-center mb-4">ভৰ্তিৰ নিয়ম আৰু চৰ্তসমূহ</h2>
+
+    <% const rules_as = [
+      "ফৰ্মটো পৰিষ্কাৰভাৱে পূৰণ কৰিব লাগিব...",
+      "ছাত্ৰই সময়ত উপস্থিত থাকিব লাগিব। ম'বাইল কঠোৰভাৱে নিষিদ্ধ...",
+      "যি ছাত্ৰ স্থানীয় নহয়, তেওঁবিলাকে বাহিৰলৈ যাবলৈ অনুমতি ল’ব লাগিব...",
+      "মাদ্ৰাছা বাহাৰুল উলূম এটা ধৰ্মীয় আৰু নৈতিক প্ৰতিষ্ঠান...",
+      "মেলা বা ছিনেমালৈ গ’লে ছাত্ৰক বহিষ্কাৰ কৰা হ’ব।",
+      "নামাজ জামাতেৰে যথাসময়ত আদায় কৰিব লাগিব।",
+      "শিক্ষক আৰু মাদ্ৰাছাৰ দায়িত্বশীলসকলক সন্মান কৰিব লাগিব।",
+      "শৃংখলা বজাই ৰাখিব লাগিব, ঝগড়া এড়াব লাগিব।",
+      "আৰক্ষিত স্থানতে থাকিব লাগিব।",
+      "অনুমতি নোহোৱাকৈ কোনো অতিথি থাকিব নোৱাৰে।",
+      "ৰাতিপুৱা অন্যৰ ঘৰত যাব নোৱাৰিব।",
+      "বিবাহ আৰু সমাজিক নিয়মসহ সকলো নিয়ম পালন কৰিব লাগিব।",
+      "ভুল তথ্য দিলে ভৰ্তি বাতিল হ’ব।",
+      "বৰ্ষিক উপস্থিতি ন্যূনতম ৭৫% হ’ব লাগিব...",
+      "পৰিষ্কাৰ বস্ত্ৰ পৰিধান কৰিব, ধূমপান নিষিদ্ধ।",
+      "আগতীয়াকৈ জনাই নাথাকিলে সপ্তাহজুৰি অনুপস্থিত থাকিলে ব্যৱস্থা লোৱা হ’ব।"
+    ]; %>
+
+    <% rules_as.forEach((rule, index) => { %>
+      <div class="rule-box">
+        <span class="rule-num"><%= index+1 %>. </span> <%= rule %>
+        <div class="options">
+          <label class="me-3">
+            <input type="radio" name="rule_as<%= index %>" value="agree"> ✔️ মঞ্জুৰ
+          </label>
+          <label>
+            <input type="radio" name="rule_as<%= index %>" value="disagree"> ❌ অমঞ্জুৰ
+          </label>
+        </div>
+      </div>
+    <% }) %>
+
+    <div class="text-center mt-4">
+      <a href="/admission" class="btn btn-primary">মঞ্জুৰ কৰক</a>
+    </div>
+  </div>
+</body>
+</html>
