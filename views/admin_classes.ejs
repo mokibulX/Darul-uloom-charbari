@@ -1,0 +1,45 @@
+<%- include("header") %>
+
+<div class="container my-5">
+  <div class="card shadow-lg p-4 mb-5">
+    <h3 class="text-center mb-4">➕ Add New Class</h3>
+    <form action="/admin/class/new" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label">Class Name</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Kitab List (comma separated)</label>
+        <input type="text" name="kitab" class="form-control" placeholder="Hidaya, Mishkat, Noorul Anwar">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Cover Image</label>
+        <input type="file" name="image" class="form-control" accept="image/*" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Save Class</button>
+    </form>
+  </div>
+
+  <h3 class="text-center mb-4">All Classes</h3>
+  <div class="row justify-content-center">
+    <% if (classes && classes.length > 0) { %>
+      <% classes.forEach(c => { %>
+        <div class="col-md-4 mb-4">
+          <div class="card shadow-lg h-100 text-center">
+            <img src="<%= c.image %>" class="card-img-top" style="height:200px; object-fit:cover;">
+            <div class="card-body">
+              <h4 class="card-title fw-bold"><%= c.name %></h4>
+              <a href="/class/<%= c._id %>" class="btn btn-primary mt-3">View Class</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-center text-muted">No classes available.</p>
+    <% } %>
+  </div>
+</div>

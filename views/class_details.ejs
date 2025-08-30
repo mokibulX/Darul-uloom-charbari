@@ -1,0 +1,40 @@
+<%- include("header") %>
+
+<div class="container my-5">
+  <% if (classData.image) { %>
+    <img src="<%= classData.image %>" class="img-fluid w-100 rounded-4 shadow mb-4" style="height:300px; object-fit:cover;">
+  <% } %>
+
+  <h2 class="fw-bold text-center text-primary mb-3"><%= classData.name %></h2>
+  <p class="text-center text-muted mb-5"><%= classData.description %></p>
+
+  <div class="card shadow border-0 rounded-4 mb-4">
+    <div class="card-body">
+      <h4 class="fw-bold text-success mb-3">📚 Kitaber Talika</h4>
+      <% if (classData.kitab && classData.kitab.length > 0) { %>
+        <ul class="list-group list-group-flush">
+          <% classData.kitab.forEach(kitab => { %>
+            <li class="list-group-item"><%= kitab %></li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="text-muted">Ei class e kono kitab add kora hoyni.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="card shadow border-0 rounded-4 mb-4">
+    <div class="card-body">
+      <h4 class="fw-bold text-info mb-3">👨‍🎓 Students</h4>
+      <% if (students && students.length > 0) { %>
+        <ul class="list-group list-group-flush">
+          <% students.forEach(stu => { %>
+            <li class="list-group-item"><%= stu.name %></li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="text-muted">Ei class e ekhono kono student jukto hoyni.</p>
+      <% } %>
+    </div>
+  </div>
+</div>

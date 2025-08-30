@@ -3,11 +3,12 @@ const app = express();
 const path = require("path");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
-const User = require("./model/data/data");  
+const User = require("./model/data/data");
 require("dotenv").config();
 const session = require("express-session");
 const multer = require("multer");
-
+const Student = require("./model/student");
+const Class = require("./model/class");
 
 // ---------------- App Setup ----------------
 app.set("view engine", "ejs");
@@ -15,22 +16,18 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-
-
-// storage সেটআপ
+// Storage setup for multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads/"); // ফাইল যাবে এই ফোল্ডারে
+    cb(null, "public/uploads/"); // file will be saved to this folder
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   }
 });
-
 const upload = multer({ storage: storage });
 
-
-// app.js এর উপরে mongoose require করার পর সংযোগ করুন
+// Mongoose connection
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -81,7 +78,6 @@ app.post("/users/:id", async (req, res) => {
     if (req.body.password !== user.password) {
       return res.send("Wrong password!");
     }
-
     res.render("detail", { user });
   } catch (err) {
     console.log(err);
@@ -113,19 +109,19 @@ app.post("/admission", upload.single("image"), async (req, res) => {
     // Unique Application ID & default status
     userData.applicationId = "APP-" + Date.now();
     userData.status = "pending";
-   req.body.agreeAll = req.body.agreeAll === "true";  
-    // Image path ঠিক করা
+    req.body.agreeAll = req.body.agreeAll === "true";
+
+    // Adjust the image path by removing "public"
     userData.image = req.file.path.replace("public", "");
 
     // ----- Amount Handle -----
-    let amount = 0;
     if (req.body.payment === "offline") {
       userData.amount = req.body.amount;
     } else if (req.body.payment === "online") {
       userData.amount = 700; // Online fixed fee
     }
 
-    // ----- Save to DB -----
+    // Save to database
     let newUser = new User(userData);
     await newUser.save();
 
@@ -138,21 +134,15 @@ app.post("/admission", upload.single("image"), async (req, res) => {
   }
 });
 
-
-///admission conditions
+// Admission conditions
 app.get("/admission/conditions", (req, res) => {
   res.render("admissionRules");
 });
-
-
-
 
 // Track form
 app.get("/track", (req, res) => {
   res.render("trackForm");
 });
-
-
 
 // Track result
 app.post("/track", async (req, res) => {
@@ -162,10 +152,10 @@ app.post("/track", async (req, res) => {
   if (!user) {
     return res.send("Invalid Application ID!");
   }
-
   res.render("trackResult", { user });
 });
 
+// ID Card
 app.get("/idcard/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -174,7 +164,6 @@ app.get("/idcard/:id", async (req, res) => {
     res.status(500).send("Error loading ID card");
   }
 });
-
 
 // Admin login
 app.get("/admin/login", (req, res) => {
@@ -188,7 +177,7 @@ app.post("/admin/login", (req, res) => {
   }
   res.send("Wrong Password!");
 });
-
+// ================== Admin Routes ==================
 // Admin panel
 app.get("/admin", isAdmin, async (req, res) => {
   try {
@@ -199,8 +188,89 @@ app.get("/admin", isAdmin, async (req, res) => {
     res.render("admin", { users: [] });
   }
 });
+// Show Admin Add Class Page
 
-// Accept
+// Admin form submission
+app.post("/admin/class/new", isAdmin, upload.single("image"), async (req, res) => {
+  try {
+    const { name, description, kitab } = req.body;
+
+    const kitabArray = kitab ? kitab.split(",").map(k => k.trim()) : [];
+
+    const newClass = new Class({
+      name,
+      description,
+      image: req.file ? "/uploads/" + req.file.filename : null,
+      kitab: kitabArray,
+    });
+
+    await newClass.save();
+    res.redirect("/admin/classes");
+  } catch (err) {
+    console.error("Error saving class:", err);
+    res.send("Error saving class: " + err.message);
+  }
+});
+  // Class card route
+app.get("/classes", async (req, res) => {
+  try {
+    const classes = await Class.find();
+    res.render("classes", { classes });
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading classes");
+  }
+});
+
+
+// Show Admin Classes
+app.get("/admin/classes", isAdmin, async (req, res) => {
+  try {
+    const classes = await Class.find();
+    res.render("admin_classes", { classes });
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading classes");
+  }
+});
+
+// Class Details Page
+app.get("/class/:id", async (req, res) => {
+  try {
+    const classData = await Class.findById(req.params.id);
+    if (!classData) return res.send("Class not found");
+
+    // Students list for this class
+    const students = await User.find({ classId: req.params.id });
+
+    res.render("class_details", { classData, students });
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading class details");
+  }
+});
+
+
+
+// Class Details Page
+app.get("/class/:id", async (req, res) => {
+  try {
+    const classData = await Class.findById(req.params.id);
+    if (!classData) return res.send("Class not found");
+
+    // যে students এই class এ আছে
+    const students = await User.find({ classId: req.params.id });
+
+    res.render("class_details", { classData, students });
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading class details");
+  }
+});
+
+
+
+// Accept user
 app.post("/accept/:id", isAdmin, async (req, res) => {
   await User.findByIdAndUpdate(req.params.id, { status: "accepted" });
   res.redirect("/admin");
@@ -215,8 +285,6 @@ app.get("/edit/:id", isAdmin, async (req, res) => {
 app.post("/edit/:id", isAdmin, upload.single("image"), async (req, res) => {
   try {
     let updateData = { ...req.body };
-
-    // যদি নতুন ছবি আপলোড করা হয়
     if (req.file) {
       updateData.image = req.file.path.replace("public", "");
     }
@@ -229,13 +297,13 @@ app.post("/edit/:id", isAdmin, upload.single("image"), async (req, res) => {
   }
 });
 
-// Delete
+// Delete user
 app.post("/delete/:id", isAdmin, async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
   res.redirect("/admin");
 });
 
-// Donation
+// Donation page
 app.get("/donation", (req, res) => {
   res.render("donation");
 });

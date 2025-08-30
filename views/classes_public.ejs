@@ -1,0 +1,29 @@
+<%- include("header") %>
+
+<div class="container my-5">
+  <h2 class="text-center mb-4">All Classes</h2>
+
+  <div class="row justify-content-center">
+    <% if (classes && classes.length > 0) { %>
+      <% classes.forEach(c => { %>
+        <div class="col-md-4 col-sm-6 mb-4">
+          <div class="card shadow-lg h-100 text-center rounded-4">
+            
+            <!-- Image -->
+            <div class="image-wrapper w-100" style="height:200px; overflow:hidden; border-top-left-radius: .25rem; border-top-right-radius: .25rem;">
+              <img src="<%= c.image %>" class="card-img-top" alt="<%= c.name %>" style="object-fit:cover; height:100%;">
+            </div>
+
+            <!-- Body -->
+            <div class="card-body">
+              <h4 class="card-title fw-bold"><%= c.name %></h4>
+              <a href="/class/<%= c._id %>" class="btn btn-primary mt-3">View Class</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-center text-muted">No classes available.</p>
+    <% } %>
+  </div>
+</div>

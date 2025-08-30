@@ -39,6 +39,8 @@ let userSchema = new Schema({
   },
    amount: { type: Number, required: true },
    agreeAll: { type: Boolean, required: true },
+   classId: { type: mongoose.Schema.Types.ObjectId, ref: "Class" }
+
 });
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 

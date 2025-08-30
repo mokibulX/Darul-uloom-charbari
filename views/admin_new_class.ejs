@@ -1,0 +1,36 @@
+<%- include("header") %>
+
+<div class="container my-5">
+  <div class="card shadow-lg border-0 p-4">
+    <h2 class="fw-bold text-center text-primary mb-4">➕ Add New Class</h2>
+
+    <form action="/admin/class/new" method="POST" enctype="multipart/form-data">
+      <!-- Class Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label">Class Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter class name" required>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Write class description"></textarea>
+      </div>
+
+      <!-- Kitab List -->
+      <div class="mb-3">
+        <label for="kitab" class="form-label">Kitaber Talika</label>
+        <input type="text" class="form-control" id="kitab" name="kitab" placeholder="Eg: Hidaya, Mishkat, Noorul Anwar">
+        <small class="text-muted">একাধিক kitab হলে , (comma) দিয়ে লিখো</small>
+      </div>
+
+      <!-- Cover Image -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Cover Photo</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Save Class</button>
+    </form>
+  </div>
+</div>
