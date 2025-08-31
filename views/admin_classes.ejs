@@ -34,6 +34,9 @@
             <div class="card-body">
               <h4 class="card-title fw-bold"><%= c.name %></h4>
               <a href="/class/<%= c._id %>" class="btn btn-primary mt-3">View Class</a>
+              <form action="/admin/class/delete/<%= c._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this class?');">
+                <button type="submit" class="btn btn-danger mt-2">Delete Class</button>
+              </form>
             </div>
           </div>
         </div>
@@ -43,3 +46,5 @@
     <% } %>
   </div>
 </div>
+
+ <%- include('footer') %>

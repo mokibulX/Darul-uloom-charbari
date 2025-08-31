@@ -1,212 +1,163 @@
 <%- include('header') %>
 
-<body>
-  <div class="container py-4">
-    <div class="text-center mb-4">
-      <h3 class="fw-bold">Darul Uloom Charbari (Gazarikandi) Madrassa</h3>
-      <h4 class="text-muted">Admission Form</h4>
-    </div>
-
-   
-    <div class="d-flex justify-content-center">
-      <form action="/admission" method="POST" class="row g-3 shadow p-4 rounded bg-light"
-            style="max-width: 650px; width: 100%" enctype="multipart/form-data">
-            <a href="/admission/conditions" class="btn btn-link" required>View Admission Conditions</a>
-        <!-- admission conditions -->
-         <div class="mb-3">
-       <label class="form-label d-block">Admission Conditions:</label>
-       <div>
-        <input type="radio" id="agreeAll" name="agreeAll" value="true" required />
-       <label for="agreeAll">I have read and agree to the admission conditions</label>
-      </div>
-       <div>
-       <input type="radio" id="disagreeAll" name="agreeAll" value="false" required />
-        <label for="disagreeAll">I have read and do not agree to the admission conditions</label>
-       </div>
-     </div>
-
-            <!-- Student Type -->
-        <div class="col-md-4">
-          <label class="form-label">Student Type:</label>
-          <select name="type" class="form-select" required>
-            <option value="new">New</option>
-            <option value="old">Old</option>
-          </select>
-        </div>
-
-        <!-- Class Info -->
-        <div class="col-md-4">
-          <label for="class" class="form-label">Class:</label>
-          <input type="text" id="class" name="class" class="form-control" required />
-        </div>
-        <div class="col-md-4">
-          <label for="prevClass" class="form-label">Previous Class:</label>
-          <input type="text" id="prevClass" name="prevClass" class="form-control" required />
-        </div>
-
-        <!-- Name Info -->
-        <div class="col-md-6">
-          <label for="name" class="form-label">Name:</label>
-          <input type="text" id="name" name="name" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="sonOf" class="form-label">Father's Name:</label>
-          <input type="text" id="sonOf" name="sonOf" class="form-control" required />
-        </div>
-
-        <!-- Personal Info -->
-        <div class="col-md-6">
-          <label for="dateOfbrith" class="form-label">Date of Birth:</label>
-          <input type="date" id="dateOfbrith" name="dateOfbrith" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="age" class="form-label">Age:</label>
-          <input type="text" id="age" name="age" class="form-control" required />
-        </div>
-
-        <!-- Address -->
-        <div class="col-md-6">
-          <label for="vill" class="form-label">Village:</label>
-          <input type="text" id="vill" name="vill" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="post" class="form-label">Post:</label>
-          <input type="text" id="post" name="post" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="police" class="form-label">Police Station:</label>
-          <input type="text" id="police" name="police" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="distric" class="form-label">District:</label>
-          <input type="text" id="distric" name="distric" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="state" class="form-label">State:</label>
-          <input type="text" id="state" name="state" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="country" class="form-label">Country:</label>
-          <input type="text" id="country" name="country" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="pin" class="form-label">PIN:</label>
-          <input type="text" id="pin" name="pin" class="form-control" required />
-        </div>
-
-        <!-- Contact -->
-        <div class="col-md-6">
-          <label for="phone" class="form-label">Phone:</label>
-          <input type="text" id="phone" name="phone" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="email" class="form-label">Email:</label>
-          <input type="email" id="email" name="email" class="form-control" />
-        </div>
-
-        <!-- Password -->
-        <div class="col-md-6">
-          <label for="password" class="form-label">Password:</label>
-          <input type="password" id="password" name="password" class="form-control" required />
-        </div>
-
-        <!-- Photo -->
-        <div class="col-md-12">
-          <label class="form-label">Photo:</label>
-          <input type="file" name="image" accept="image/*" class="form-control" required />
-        </div>
-
-        <!-- Payment Method -->
-        <div class="col-md-6">
-          <label class="form-label">Payment Method:</label>
-          <select id="paymentMethod" name="payment" class="form-select" required>
-            <option value="">--Select--</option>
-            <option value="offline">Offline</option>
-            <option value="online">Online</option>
-          </select>
-        </div>
-
-        <!-- Offline Payment -->
-        <div class="col-md-6 d-none" id="offlineBox">
-          <label class="form-label">Amount (Offline):</label>
-          <input type="number" name="amount" id="offlineAmount" class="form-control" placeholder="Enter Amount" />
-          <button type="button" class="btn btn-success mt-3 d-none" id="offlinePayButton">💰 Pay Offline</button>
-        </div>
-
-        <!-- Online Payment -->
-        <div class="col-md-12 d-none" id="onlineBox">
-          <button type="button" class="btn btn-success w-100 mt-3" id="onlinePayButton">💳 Pay Online via UPI</button>
-          <small class="text-muted d-block mt-2 text-center">
-            Pay using PhonePe, Google Pay, or any UPI app
-          </small>
-        </div>
-
-        <!-- Submit Button -->
-        <div class="col-12 text-center">
-          <button type="submit" class="btn btn-primary px-4 mt-4">Submit Admission</button>
-        </div>
-      </form>
-    </div>
+<div class="container py-4">
+  <div class="text-center mb-4">
+    <h3 class="fw-bold">Darul Uloom Charbari (Gazarikandi) Madrassa</h3>
+    <h4 class="text-muted">Admission Form</h4>
   </div>
 
-  <script>
-    const paymentMethod = document.getElementById("paymentMethod");
-    const offlineBox = document.getElementById("offlineBox");
-    const onlineBox = document.getElementById("onlineBox");
-    const offlineAmount = document.getElementById("offlineAmount");
-    const offlinePayButton = document.getElementById("offlinePayButton");
-    const onlinePayButton = document.getElementById("onlinePayButton");
+  <div class="d-flex justify-content-center">
+    <form action="/admission" method="POST" class="row g-3 shadow p-4 rounded bg-light"
+          style="max-width: 650px; width: 100%" enctype="multipart/form-data">
 
-    // Your UPI ID
-    const upiId = "alommokibul11@ybl";
+      <a href="/admission/conditions" class="btn btn-link">View Admission Conditions</a>
 
-    // Payment method change
-    paymentMethod.addEventListener("change", function () {
-      if (this.value === "offline") {
-        offlineBox.classList.remove("d-none");
-        onlineBox.classList.add("d-none");
-        offlineAmount.value = 500;
-        checkOfflineAmount();
-      } else if (this.value === "online") {
-        onlineBox.classList.remove("d-none");
-        offlineBox.classList.add("d-none");
-        offlineAmount.value = "";
-        offlinePayButton.classList.add("d-none");
-      } else {
-        offlineBox.classList.add("d-none");
-        onlineBox.classList.add("d-none");
-        offlineAmount.value = "";
-        offlinePayButton.classList.add("d-none");
-      }
-    });
+      <!-- Admission Conditions -->
+      <div class="mb-3">
+        <label class="form-label d-block">Admission Conditions:</label>
+        <div>
+          <input type="radio" id="agreeAll" name="agreeAll" value="true" required />
+          <label for="agreeAll">I have read and agree</label>
+        </div>
+        <div>
+          <input type="radio" id="disagreeAll" name="agreeAll" value="false" required />
+          <label for="disagreeAll">I do not agree</label>
+        </div>
+      </div>
 
-    // Show Offline Pay button only if amount > 0
-    offlineAmount.addEventListener("input", checkOfflineAmount);
-    function checkOfflineAmount() {
-      if (offlineAmount.value && parseFloat(offlineAmount.value) > 0) {
-        offlinePayButton.classList.remove("d-none");
-      } else {
-        offlinePayButton.classList.add("d-none");
-      }
-    }
+      <!-- Student Type -->
+      <div class="col-md-4">
+        <label class="form-label">Student Type:</label>
+        <select name="type" class="form-select" required>
+          <option value="new">New</option>
+          <option value="old">Old</option>
+        </select>
+      </div>
 
-    // Online Pay Button click -> UPI intent
-    onlinePayButton.addEventListener("click", function () {
-      const amount = 700; // fixed online amount
-      const upiUrl = `upi://pay?pa=${upiId}&pn=Darul+Uloom+Charbari&am=${amount}&cu=INR`;
-      window.location.href = upiUrl;
-    });
-  // agree disagree
-      const checkboxes = document.querySelectorAll('input[name="agreeAll"]');
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", function () {
-      if (this.checked) {
-        checkboxes.forEach((cb) => {
-          if (cb !== this) cb.checked = false;
-        });
-      }
-    });
-  });
-  </script>
-</body>
-</html>
+      <!-- Class Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Class:</label>
+        <select name="classId" class="form-select" required>
+          <option value="">--Select Class--</option>
+          <% classes.forEach(cls => { %>
+            <option value="<%= cls._id %>"><%= cls.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label for="prevClass" class="form-label">Previous Class:</label>
+        <input type="text" id="prevClass" name="prevClass" class="form-control" />
+      </div>
+
+      <!-- Name & Father -->
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="sonOf" class="form-label">Father's Name:</label>
+        <input type="text" id="sonOf" name="sonOf" class="form-control" required />
+      </div>
+
+      <!-- DOB & Age -->
+      <div class="col-md-6">
+        <label for="dateOfbrith" class="form-label">Date of Birth:</label>
+        <input type="date" id="dateOfbrith" name="dateOfbrith" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="age" class="form-label">Age:</label>
+        <input type="number" id="age" name="age" class="form-control" required />
+      </div>
+
+      <!-- Address -->
+      <div class="col-md-6">
+        <label for="vill" class="form-label">Village:</label>
+        <input type="text" id="vill" name="vill" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="post" class="form-label">Post:</label>
+        <input type="text" id="post" name="post" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label for="police" class="form-label">Police Station:</label>
+        <input type="text" id="police" name="police" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="distric" class="form-label">District:</label>
+        <input type="text" id="distric" name="distric" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="state" class="form-label">State:</label>
+        <input type="text" id="state" name="state" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="country" class="form-label">Country:</label>
+        <input type="text" id="country" name="country" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="pin" class="form-label">PIN:</label>
+        <input type="number" id="pin" name="pin" class="form-control" required />
+      </div>
+
+      <!-- Contact & Password -->
+      <div class="col-md-6">
+        <label for="phone" class="form-label">Phone:</label>
+        <input type="number" id="phone" name="phone" class="form-control" required />
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" name="password" class="form-control" required />
+      </div>
+
+      <!-- Photo -->
+      <div class="col-md-12">
+        <label class="form-label">Photo:</label>
+        <input type="file" name="image" accept="image/*" class="form-control" required />
+      </div>
+
+      <!-- Payment -->
+      <div class="col-md-6">
+        <label class="form-label">Payment Method:</label>
+        <select id="paymentMethod" name="payment" class="form-select" required>
+          <option value="">--Select--</option>
+          <option value="offline">Offline</option>
+          <option value="online">Online</option>
+        </select>
+      </div>
+      <div class="col-md-6 d-none" id="offlineBox">
+        <label class="form-label">Amount (Offline):</label>
+        <input type="number" name="amount" id="offlineAmount" class="form-control" placeholder="Enter Amount" />
+      </div>
+
+      <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary px-4 mt-4">Submit Admission</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+ <%- include('footer') %>
+
+<script>
+const paymentMethod = document.getElementById("paymentMethod");
+const offlineBox = document.getElementById("offlineBox");
+const offlineAmount = document.getElementById("offlineAmount");
+
+paymentMethod.addEventListener("change", function () {
+  if (this.value === "offline") {
+    offlineBox.classList.remove("d-none");
+    offlineAmount.value = 500;
+  } else {
+    offlineBox.classList.add("d-none");
+    offlineAmount.value = "";
+  }
+});
+</script>
+
+

@@ -1,0 +1,44 @@
+<%- include('header') %>
+
+<div class="container my-5">
+  <h1 class="text-center mb-4">Students of Darul Uloom Charbari</h1>
+
+  <% 
+    const classMap = {};
+    insertData.forEach(student => {
+      const className = student.classId ? student.classId.name : "Unassigned";
+      if (!classMap[className]) classMap[className] = [];
+      classMap[className].push(student);
+    });
+  %>
+
+  <% Object.keys(classMap).forEach(className => { %>
+    <h3 class="mt-5 mb-3 text-success"><%= className %></h3>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>Class</th>
+            <th>Name</th>
+            <th>Photo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% classMap[className].forEach(student => { %>
+            <tr>
+              <td><%= className %></td>
+              <td class="text-start">
+                <a href="/users/<%= student._id %>" class="btn btn-link"><%= student.name %></a>
+              </td>
+              <td class="text-end">
+                <img src="<%= student.image || '/default.png' %>" alt="<%= student.name %>" class="img-fluid rounded" style="height:100px; width:100px; object-fit:cover;">
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('footer') %>

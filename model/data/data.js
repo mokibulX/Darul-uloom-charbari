@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
   type: { type: String, enum: ["new", "old"], default: "new" },
-  class: { type: String, required: true },
   prevClass: { type: String, required: true },
   name: { type: String, required: true },
   sonOf: { type: String, required: true },
@@ -37,11 +37,24 @@ let userSchema = new Schema({
     enum: ["online", "offline"],
     required: true
   },
-   amount: { type: Number, required: true },
-   agreeAll: { type: Boolean, required: true },
-   classId: { type: mongoose.Schema.Types.ObjectId, ref: "Class" }
-
+  amount: { type: Number, required: true },
+  agreeAll: { type: Boolean, required: true },
+  classId: { type: mongoose.Schema.Types.ObjectId, ref: "Class" }
 });
-const User = mongoose.models.User || mongoose.model("User", userSchema);
 
+// ---------------- Password Hashing ----------------
+userSchema.pre("save", async function(next) {
+  if (this.isModified("password")) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
+
+// Compare password method for login/check
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 module.exports = User;

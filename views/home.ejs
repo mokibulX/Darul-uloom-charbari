@@ -1,17 +1,101 @@
 <%- include('header') %>
 
-<body>
+<div class="container-fluid p-0">
 
-    <h1>Welcome to Darul Uloom Charbari</h1>
+  <!-- Carousel -->
+  <div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <% for(let i=1; i<=5; i++){ %>
+      <div class="carousel-item <%= i===1 ? 'active' : '' %>">
+        <img src="/images/carousel<%=i%>.jpg" class="d-block w-100" alt="Slide <%=i%>" style="height:500px; object-fit:cover;">
+      </div>
+      <% } %>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
 
-    <ul>
-        <% for (let user of insertData) { %>
+  <!-- About Madrassa Section -->
+  <section class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <img src="/images/section1.jpg" class="img-fluid rounded shadow-sm" alt="Madrassa">
+      </div>
+      <div class="col-md-6">
+        <h2 class="fw-bold">Darul Uloom Charbari</h2>
+        <p class="lead">
+          Darul Uloom Charbari is a beacon of Islamic education. Students can achieve <strong>Alim-level knowledge</strong> and become <strong>Hafiz of Quran</strong>. 
+        </p>
+        <p>
+          Education in Islamic sciences develops moral, spiritual, and intellectual excellence. It is essential to nurture future scholars.
+        </p>
+      </div>
+    </div>
+  </section>
 
-         <li> Name : <a href="/users/<%= user._id %>"><%= user.name %></a></li>
+  <!-- Quran & Hadith Section -->
+  <section class="bg-light py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">Quran & Hadith Guidance</h2>
+      <div class="row g-4">
+        <% const hadiths = [
+          { text: "Seek knowledge from cradle to grave. (Sahih al-Bukhari)" },
+          { text: "The best among you are those who learn and teach Quran. (Sahih Muslim)" },
+          { text: "Acquire knowledge and impart it to others. (Tirmidhi)" },
+          { text: "Whoever travels a path seeking knowledge, Allah makes the path to Jannah easy. (Muslim)" },
+          { text: "Verily, Allah loves those who seek knowledge. (Ibn Majah)" },
+          { text: "The superiority of the learned over the worshipper is like the moon over all stars. (Abu Dawood)" },
+          { text: "Learning is an obligation for every Muslim. (Ibn Majah)" },
+          { text: "Knowledge enlivens the soul. (Tirmidhi)" },
+          { text: "Study knowledge before it is too late. (Ahmad)" },
+          { text: "Knowledge is the key to Paradise. (Bukhari)" }
+        ]; %>
 
+        <% hadiths.forEach((hadith, idx) => { %>
+        <div class="col-md-6">
+          <div class="card h-100 shadow-sm">
+            <div class="row g-0">
+              <div class="col-4">
+                <img src="/images/section<%= idx+2 %>.jpg" class="img-fluid rounded-start" alt="Hadith <%=idx+1%>" style="height:100%; object-fit:cover;">
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <p class="card-text"><%= hadith.text %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
 
-        <% } %>
-    </ul>
+  <!-- Dua & Importance Section -->
+  <section class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 order-md-2">
+        <img src="/images/section12.jpg" class="img-fluid rounded shadow-sm" alt="Dua">
+      </div>
+      <div class="col-md-6 order-md-1">
+        <h2 class="fw-bold">Importance of Dua & Madrassa Education</h2>
+        <p class="lead">
+          Madrassa education builds strong character, spiritual excellence, and knowledge of Islam. Dua strengthens our faith and connects us with Allah.
+        </p>
+        <ul>
+          <li>Learning in a madrassa brings reward in this life and the next.</li>
+          <li>Islamic knowledge guides righteous living.</li>
+          <li>Developing good morals, ethics, and discipline.</li>
+          <li>Participation in social events like fairs & community learning enhances experience.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-</body>
-</html>
+</div>
+
+<%- include('footer') %>
