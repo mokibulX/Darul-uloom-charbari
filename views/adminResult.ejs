@@ -1,0 +1,60 @@
+<%- include("header") %>
+
+<h2>Upload Class Exam Results</h2>
+
+<form method="GET" action="/admin/result/upload">
+  <label>Select Class:</label>
+  <select name="classId" onchange="this.form.submit()">
+    <option value="">--Select--</option>
+    <% classes.forEach(c => { %>
+      <option value="<%= c._id %>" <%= selectedClass == c._id ? "selected" : "" %>><%= c.name %></option>
+    <% }) %>
+  </select>
+</form>
+
+<% if(students.length > 0) { %>
+<form method="POST" action="/admin/result/upload">
+  <input type="hidden" name="classId" value="<%= selectedClass %>">
+  <label>Exam Month:</label>
+  <input type="text" name="examMonth" required>
+  <label>Exam Year:</label>
+  <input type="text" name="examYear" required>
+
+  <table border="1" cellpadding="5">
+    <thead>
+      <tr>
+        <th>Student Name</th>
+        <th>Kitab</th>
+        <th>Full Mark</th>
+        <th>Obtained Mark</th>
+        <th>Pass/Fail</th>
+        <th>Division</th>
+        <th>Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% students.forEach((stu, idx) => { %>
+        <tr>
+          <td><%= stu.name %></td>
+          <td>
+            <select name="studentResults[<%= idx %>][kitab]">
+              <% stu.kitab.forEach(k => { %>
+                <option value="<%= k %>"><%= k %></option>
+              <% }) %>
+            </select>
+          </td>
+          <td><input type="number" name="studentResults[<%= idx %>][fullMark]" required></td>
+          <td><input type="number" name="studentResults[<%= idx %>][obtainedMark]" required></td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <input type="hidden" name="studentResults[<%= idx %>][studentId]" value="<%= stu._id %>">
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <button type="submit">Upload Results</button>
+</form>
+<% } %>
+
+<%- include("footer") %>

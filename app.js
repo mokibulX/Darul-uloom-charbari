@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const multer = require("multer");
 require("dotenv").config();
+const Result = require("./model/result");
 
 // Models
 const User = require("./model/data/data");
@@ -298,7 +299,96 @@ app.post("/delete/:id", isAdmin, async (req, res) => {
   res.redirect("/admin");
 });
 
-// ---------------- Donation ----------------
+
+/// result admin route
+
+
+// Show result upload form
+// Admin Result Upload Page
+
+// Show Result Upload Page
+app.get("/admin/result/upload", isAdmin, async (req, res) => {
+  try {
+    const classes = await Class.find();
+    let students = [];
+    let selectedClass = req.query.classId || null;
+
+    if (selectedClass) {
+      students = await Student.find({ classId: selectedClass });
+    }
+
+    res.render("adminResult", { classes, students, selectedClass });
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading result page");
+  }
+});
+
+// Handle Result Submission
+app.post("/admin/result/upload", isAdmin, async (req, res) => {
+  try {
+    const results = req.body.studentResults; // Array of student results
+    const { classId, examMonth, examYear } = req.body;
+
+    // Remove old results of the same class & exam if any
+    await Result.deleteMany({ classId, examMonth, examYear });
+
+    // Save new results
+    for (let r of results) {
+      let passFail = r.obtainedMark >= (r.fullMark * 0.33) ? "Pass" : "Fail";
+
+      // Calculate division
+      let division = "Fail";
+      if (passFail === "Pass") {
+        let percent = (r.obtainedMark / r.fullMark) * 100;
+        if (percent >= 60) division = "First";
+        else if (percent >= 45) division = "Second";
+        else division = "Third";
+      }
+
+      await Result.create({
+        classId,
+        studentId: r.studentId,
+        kitab: r.kitab,
+        fullMark: r.fullMark,
+        obtainedMark: r.obtainedMark,
+        passFail,
+        division,
+        examMonth,
+        examYear
+      });
+    }
+
+    res.send("Results uploaded successfully!");
+  } catch (err) {
+    console.error(err);
+    res.send("Error uploading results: " + err.message);
+  }
+});
+
+//// result show route  
+// Show class-wise results
+app.get("/results", async (req, res) => {
+  try {
+    const classes = await Class.find();
+    let results = [];
+    let selectedClass = req.query.classId || null;
+
+    if (selectedClass) {
+      // Populate student info
+      results = await Result.find({ classId: selectedClass })
+        .populate("studentId", "name") // populate student name
+        .sort({ obtainedMark: -1 }); // sorting by obtained marks for position
+    }
+
+    res.render("classResults", { classes, results, selectedClass });
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading results");
+  }
+});
+
+//----------- Donation ----------------
 app.get("/donation", (req, res) => res.render("donation"));
 
 // ---------------- Privacy & Terms ----------------
