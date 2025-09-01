@@ -1,0 +1,97 @@
+<%- include("header") %>
+
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">📊 Upload Class Exam Results</h2>
+
+  <!-- ✅ Class select form -->
+  <form method="GET" action="/admin/result/upload" class="mb-4">
+    <div class="row g-3 align-items-center">
+      <div class="col-auto">
+        <label for="classId" class="col-form-label fw-bold">Select Class:</label>
+      </div>
+      <div class="col-auto">
+        <select name="classId" id="classId" class="form-select" onchange="this.form.submit()">
+          <option value="">-- Select Class --</option>
+          <% classes.forEach(c => { %>
+            <option value="<%= c._id %>" <%= selectedClass == c._id ? "selected" : "" %>>
+              <%= c.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+    </div>
+  </form>
+
+  <% if (students.length > 0 && kitabs.length > 0) { %>
+  <form method="POST" action="/admin/result/upload" class="card shadow p-4">
+    <input type="hidden" name="classId" value="<%= selectedClass %>">
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Exam Month:</label>
+        <input type="text" name="examMonth" class="form-control" placeholder="e.g. January" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Exam Year:</label>
+        <input type="text" name="examYear" class="form-control" placeholder="e.g. 2025" required>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark text-center">
+          <tr>
+            <th>Student Name</th>
+            <% kitabs.forEach(k => { %>
+              <th><%= k %> (Marks)</th>
+            <% }) %>
+            <th>Total Full Marks</th>
+            <th>Total Obtained</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% students.forEach((stu, sIdx) => { %>
+            <tr>
+              <td><%= stu.name %></td>
+              <% kitabs.forEach((k, kIdx) => { %>
+                <td>
+                  <input type="number" 
+                         name="studentResults[<%= sIdx %>][marks][<%= kIdx %>][obtained]" 
+                         class="form-control" 
+                         placeholder="Obtained" required>
+                  <input type="hidden" 
+                         name="studentResults[<%= sIdx %>][marks][<%= kIdx %>][kitab]" 
+                         value="<%= k %>">
+                </td>
+              <% }) %>
+              <td>
+                <input type="number" 
+                       name="studentResults[<%= sIdx %>][fullMark]" 
+                       class="form-control" 
+                       placeholder="Full Marks" required>
+              </td>
+              <td>
+                <input type="number" 
+                       name="studentResults[<%= sIdx %>][totalObtained]" 
+                       class="form-control" 
+                       placeholder="Total" required>
+              </td>
+              <input type="hidden" 
+                     name="studentResults[<%= sIdx %>][studentId]" 
+                     value="<%= stu._id %>">
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-3">
+      <button type="submit" class="btn btn-success px-4 py-2">
+        ✅ Upload Results
+      </button>
+    </div>
+  </form>
+  <% } %>
+</div>
+
+<%- include("footer") %>

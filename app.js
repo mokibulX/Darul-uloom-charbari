@@ -300,93 +300,208 @@ app.post("/delete/:id", isAdmin, async (req, res) => {
 });
 
 
-/// result admin route
-
-
-// Show result upload form
-// Admin Result Upload Page
 
 // Show Result Upload Page
+// GET Upload Page
+// ---------------- Result Upload ----------------
+
+// ============================
+// 📌 Admin Result Upload (GET)
+// ============================
 app.get("/admin/result/upload", isAdmin, async (req, res) => {
   try {
+    const { classId } = req.query;
     const classes = await Class.find();
-    let students = [];
-    let selectedClass = req.query.classId || null;
 
-    if (selectedClass) {
-      students = await Student.find({ classId: selectedClass });
+    let students = [];
+    let kitabs = [];
+
+    if (classId) {
+      const classInfo = await Class.findById(classId);
+      if (classInfo) {
+        students = await User.find({ classId, status: "accepted" });
+        kitabs = classInfo.kitab || [];
+      }
     }
 
-    res.render("adminResult", { classes, students, selectedClass });
+    res.render("uploadResult", {
+      classes,
+      selectedClass: classId || "",
+      students,
+      kitabs
+    });
   } catch (err) {
-    console.error(err);
-    res.send("Error loading result page");
+    console.error("❌ Error loading result upload page:", err);
+    res.status(500).send("Error loading result upload page");
   }
 });
 
-// Handle Result Submission
+
+// ============================
+// 📌 Admin Result Upload (POST)
+// ============================
 app.post("/admin/result/upload", isAdmin, async (req, res) => {
   try {
-    const results = req.body.studentResults; // Array of student results
-    const { classId, examMonth, examYear } = req.body;
+    const { classId, examMonth, examYear, studentResults } = req.body;
 
-    // Remove old results of the same class & exam if any
-    await Result.deleteMany({ classId, examMonth, examYear });
+    for (let s of studentResults) {
+      let totalMarks = 0;
+      let subjects = [];
 
-    // Save new results
-    for (let r of results) {
-      let passFail = r.obtainedMark >= (r.fullMark * 0.33) ? "Pass" : "Fail";
+      if (s.marks && Array.isArray(s.marks)) {
+        s.marks.forEach(m => {
+          let obtained = parseInt(m.obtained) || 0;
+          totalMarks += obtained;
+          subjects.push({
+            kitab: m.kitab,
+            obtainedMark: obtained,
+            fullMark: 100
+          });
+        });
+      }
 
-      // Calculate division
+      // ✅ Pass/Fail
+      const passFail = subjects.every(sub => sub.obtainedMark >= 40) ? "Pass" : "Fail";
+
+      // ✅ Division
+      const percentage = subjects.length ? (totalMarks / (subjects.length * 100)) * 100 : 0;
       let division = "Fail";
       if (passFail === "Pass") {
-        let percent = (r.obtainedMark / r.fullMark) * 100;
-        if (percent >= 60) division = "First";
-        else if (percent >= 45) division = "Second";
-        else division = "Third";
+        if (percentage >= 60) division = "1st";
+        else if (percentage >= 45) division = "2nd";
+        else division = "3rd";
       }
 
       await Result.create({
         classId,
-        studentId: r.studentId,
-        kitab: r.kitab,
-        fullMark: r.fullMark,
-        obtainedMark: r.obtainedMark,
-        passFail,
-        division,
+        studentId: s.studentId,
         examMonth,
-        examYear
+        examYear,
+        subjects,
+        totalMarks,
+        passFail,
+        division
       });
     }
 
-    res.send("Results uploaded successfully!");
+    res.redirect(`/result/class/${classId}?examMonth=${examMonth}&examYear=${examYear}`);
   } catch (err) {
-    console.error(err);
-    res.send("Error uploading results: " + err.message);
+    console.error("❌ Error uploading results:", err);
+    res.status(500).send("Error uploading results");
   }
 });
 
-//// result show route  
-// Show class-wise results
+
+// ============================
+// 📌 Single Student Result Card (Admin)
+// ============================
+app.get("/admin/result/:studentId", isAdmin, async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const { classId, examMonth, examYear } = req.query;
+
+    // Class Info
+    const classInfo = await Class.findById(classId);
+
+    // Student Result
+    const result = await Result.findOne({ 
+        classId, 
+        studentId, 
+        examMonth, 
+        examYear 
+      })
+      .populate("studentId", "name");
+
+    if (!result) {
+      return res.status(404).send("Result not found for this student");
+    }
+
+    // Position calculation (Rank inside class)
+    const allResults = await Result.find({ classId, examMonth, examYear })
+      .sort({ totalMarks: -1 });
+
+    let position = allResults.findIndex(r => r.studentId.toString() === studentId) + 1;
+    result.position = position;
+
+    // Render result card
+    res.render("result", {
+      classInfo,
+      result,
+      examMonth,
+      examYear
+    });
+
+  } catch (err) {
+    console.error("❌ Error loading result:", err);
+    res.status(500).send("Error loading result");
+  }
+});
+
+
+// ============================
+// 📌 Class-wise Result Report (Public)
+// ============================
+// ============================
+// 📌 Class-wise Result Report (Public)
+// ============================
+// Class wise result show
+app.get("/result/class/:classId", async (req, res) => {
+  try {
+    const { classId } = req.params;
+
+    // class info আনবো
+    const classInfo = await Class.findById(classId);
+
+    // ওই class এর সব result আনবো
+    const results = await Result.find({ classId })
+      .populate({ path: "studentId", select: "name" })
+      .populate("classId");
+
+    res.render("resultReport", {
+      classInfo,
+      results,
+      examMonth: results.length > 0 ? results[0].examMonth : "",
+      examYear: results.length > 0 ? results[0].examYear : ""
+    });
+  } catch (err) {
+    console.error("Error loading result:", err);
+    res.status(500).send("Error loading result");
+  }
+});
+
+
+
+// Result class list দেখানোর জন্য
 app.get("/results", async (req, res) => {
   try {
     const classes = await Class.find();
-    let results = [];
-    let selectedClass = req.query.classId || null;
-
-    if (selectedClass) {
-      // Populate student info
-      results = await Result.find({ classId: selectedClass })
-        .populate("studentId", "name") // populate student name
-        .sort({ obtainedMark: -1 }); // sorting by obtained marks for position
-    }
-
-    res.render("classResults", { classes, results, selectedClass });
+    res.render("resultsClassList", { classes });
   } catch (err) {
     console.error(err);
-    res.send("Error loading results");
+    res.status(500).send("Server Error");
   }
 });
+
+// নির্দিষ্ট class এর result দেখানোর জন্য
+app.get("/results/:classId", async (req, res) => {
+  try {
+    const { classId } = req.params;
+    const { examMonth, examYear } = req.query;
+
+    const classInfo = await Class.findById(classId);
+    const results = await Result.find({ classId, examMonth, examYear })
+      .populate("studentId");
+
+    res.render("resultReport", { classInfo, results, examMonth, examYear });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
+
+
+
+
 
 //----------- Donation ----------------
 app.get("/donation", (req, res) => res.render("donation"));

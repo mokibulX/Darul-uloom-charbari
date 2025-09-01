@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Select a Class to View Results</h2>
+
+    <div class="row">
+      <% classes.forEach(c => { %>
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title"><%= c.name %></h5>
+
+              <!-- Exam Filter form -->
+              <form action="/results/<%= c._id %>" method="get" class="mt-2">
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="text" name="examMonth" class="form-control" placeholder="Exam Month (e.g. March)" required>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="text" name="examYear" class="form-control" placeholder="Year (e.g. 2025)" required>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm mt-2">View Results</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>
