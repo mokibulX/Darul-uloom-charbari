@@ -1,0 +1,66 @@
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 750px; margin:auto; padding:25px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1); background:#fdfdfd;">
+
+  <!-- Header Card -->
+  <div style="display:flex; align-items:center; margin-bottom:30px;">
+    <img src="<%= student.image ? student.image : '/default.png' %>" 
+         style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #007bff; margin-right:20px;">
+    <div>
+      <h2 style="margin:0; color:#007bff; font-size:1.8em;"><%= student.name %></h2>
+      <p style="margin:3px 0; font-size:0.95em;"><strong>Application ID:</strong> <%= student.applicationId %></p>
+      <p style="margin:3px 0; font-size:0.95em;"><strong>Class:</strong> <%= classInfo.name %></p>
+      <p style="margin:3px 0; font-size:0.95em;"><strong>Exam Year:</strong> <%= examYear %></p>
+      <p style="margin:3px 0; font-size:0.95em;">
+        <strong>Position:</strong> 
+        <span style="background:#17a2b8; color:white; padding:4px 10px; border-radius:12px; font-weight:bold;"><%= position %></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Result Table -->
+  <table style="width:100%; border-collapse: collapse; border-radius:10px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+    <thead style="background:#007bff; color:white; font-weight:bold;">
+      <tr>
+        <th style="padding:12px; text-align:left;">Subject / Kitab</th>
+        <th style="padding:12px; text-align:center;">Obtained Marks</th>
+        <th style="padding:12px; text-align:center;">Full Marks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% kitabs.forEach(sub => { 
+           const subData = result.subjects.find(s => s.kitab === sub); 
+      %>
+      <tr style="background:#f7f7f7;">
+        <td style="padding:12px; text-align:left; font-weight:600;"><%= sub %></td>
+        <td style="padding:12px; text-align:center; font-weight:bold; color:#007bff;"><%= subData ? subData.obtainedMark : '-' %></td>
+        <td style="padding:12px; text-align:center; font-weight:600;"><%= subData ? subData.fullMark : '-' %></td>
+      </tr>
+      <% }) %>
+
+      <!-- Total Row -->
+      <tr style="background:#e2e3e5; font-weight:bold;">
+        <td style="padding:12px;">Total</td>
+        <td colspan="2" style="text-align:center; color:#007bff; padding:12px;"><%= result.totalMarks %></td>
+      </tr>
+
+      <!-- Status Row -->
+      <tr style="font-weight:bold;">
+        <td style="padding:12px;">Status</td>
+        <td colspan="2" style="text-align:center; padding:12px;">
+          <% if(result.passFail==='Pass'){ %>
+            <span style="display:inline-block; background:#28a745; color:white; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.95em;">✅ Pass</span>
+          <% } else { %>
+            <span style="display:inline-block; background:#dc3545; color:white; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.95em;">❌ Fail</span>
+          <% } %>
+        </td>
+      </tr>
+
+      <!-- Division Row -->
+      <tr style="font-weight:bold;">
+        <td style="padding:12px;">Division</td>
+        <td colspan="2" style="text-align:center; padding:12px;">
+          <span style="display:inline-block; background:#ffc107; color:#212529; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.95em;"><%= result.division %></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

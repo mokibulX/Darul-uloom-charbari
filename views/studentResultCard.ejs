@@ -1,0 +1,95 @@
+<%- include("header") %>
+
+<div class="container my-5">
+
+  <!-- Page Header -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold text-primary display-5">📊 Student Result Card</h1>
+    <h3 class="text-secondary"><%= student ? student.name : "Unknown Student" %></h3>
+    <p class="fs-6 text-muted">
+      <strong>Class:</strong> <%= classInfo ? classInfo.name : "-" %> | 
+      <strong>Exam Year:</strong> <%= examYear %> | 
+      <strong>Position:</strong> <%= position || '-' %>
+    </p>
+  </div>
+
+  <!-- Student Info Card -->
+  <div class="card mb-4 shadow border-0 rounded-4 p-3 d-flex flex-row align-items-center">
+    <img src="<%= student && student.image ? student.image : '/default.png' %>" 
+         alt="Photo" class="rounded-circle border border-3 border-primary me-4" width="120" height="120" style="object-fit: cover;">
+    <div>
+      <h4 class="fw-bold text-primary mb-1"><%= student ? student.name : "Unknown" %></h4>
+      <p class="mb-1"><strong>Application ID:</strong> <%= student ? student.applicationId : '-' %></p>
+      <p class="mb-1"><strong>Class:</strong> <%= classInfo ? classInfo.name : '-' %></p>
+      <p class="mb-0"><strong>Position in Class:</strong> 
+        <span class="badge bg-info text-dark fs-6"><%= position || '-' %></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Result Table -->
+  <div class="card shadow-lg border-0 rounded-4 mb-3">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center">
+          <thead class="table-dark">
+            <tr class="text-uppercase">
+              <th>Subject / Kitab</th>
+              <th>Obtained Marks</th>
+              <th>Full Marks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% kitabs.forEach(sub => { 
+                 const subData = result && result.subjects ? result.subjects.find(s => s.kitab === sub) : null; 
+            %>
+              <tr>
+                <td class="text-start fw-semibold"><%= sub %></td>
+                <td class="fw-bold text-primary"><%= subData ? subData.obtainedMark : '-' %></td>
+                <td class="fw-semibold"><%= subData ? subData.fullMark : '-' %></td>
+              </tr>
+            <% }) %>
+
+            <!-- Total Row -->
+            <tr class="table-secondary fw-bold">
+              <td>Total</td>
+              <td colspan="2" class="text-primary fs-6"><%= result ? result.totalMarks : 0 %></td>
+            </tr>
+
+            <!-- Status Row -->
+            <tr class="fw-bold">
+              <td>Status</td>
+              <td colspan="2">
+                <% if (result && result.passFail === "Pass") { %>
+                  <span class="badge bg-success fs-6">✅ Pass</span>
+                <% } else { %>
+                  <span class="badge bg-danger fs-6">❌ Fail</span>
+                <% } %>
+              </td>
+            </tr>
+
+            <!-- Division Row -->
+            <tr class="fw-bold">
+              <td>Division</td>
+              <td colspan="2">
+                <span class="badge bg-warning text-dark fs-6"><%= result ? result.division : '-' %></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="d-grid gap-2">
+    <a href="/results/view?classId=<%= classInfo ? classInfo._id : '' %>&examYear=<%= examYear %>" 
+       class="btn btn-outline-primary fw-bold">⬅ Back to Class Results</a>
+
+    <a href="/student/result/<%= student._id %>/pdf?classId=<%= classInfo._id %>&examYear=<%= examYear %>" 
+       class="btn btn-warning fw-bold">📄 Download PDF</a>
+  </div>
+
+</div>
+
+<%- include("footer") %>

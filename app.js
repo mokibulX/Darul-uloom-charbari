@@ -1,3 +1,7 @@
+// -------------------------
+// app.js
+// -------------------------
+
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -5,12 +9,14 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const multer = require("multer");
 require("dotenv").config();
-const Result = require("./model/result");
+const puppeteer = require("puppeteer");
 
-// Models
+// ---------------- Models ----------------
 const User = require("./model/data/data");
-const Student = require("./model/student");
 const Class = require("./model/class");
+const Result = require("./model/result");
+const Subject = require("./model/subject");
+
 
 // ---------------- App Setup ----------------
 app.set("view engine", "ejs");
@@ -30,8 +36,8 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("Connected to MongoDB"))
-.catch(err => console.error("MongoDB connection error:", err));
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.error("❌ MongoDB connection error:", err));
 
 // ---------------- Session ----------------
 app.use(
@@ -48,65 +54,45 @@ const isAdmin = (req, res, next) => {
   res.redirect("/admin/login");
 };
 
-
-///home route 
-
-// Home page route
+// ---------------- Home ----------------
 app.get("/", async (req, res) => {
   try {
-    // Accepted students
-    const students = await User.find({ status: "accepted" }).populate('classId');
-
-    // All classes
-    const classes = await Class.find();
-
-    res.render("home", {
-      insertData: students,
-      classes: classes
-    });
-  } catch (err) {
-    console.error("Error loading home page:", err);
-    res.render("home", {
-      insertData: [],
-      classes: []
-    });
-  }
-});
-
-
-// ---------------- Routes ----------------
-// All students - grouped by class
-app.get("/all-students", async (req, res) => {
-  try {
-    const data = await User.find({ status: "accepted" }).populate("classId");
-
-    const classMap = {};
-    data.forEach(student => {
-      const className = student.classId ? student.classId.name : "Unassigned";
-      if (!classMap[className]) classMap[className] = [];
-      classMap[className].push(student);
-    });
-    res.render("students", { insertData: data, classMap });
+    const students = await User.find({ status: "accepted" }).populate("classId").lean();
+    const classes = await Class.find().lean();
+    res.render("home", { insertData: students, classes });
   } catch (err) {
     console.error(err);
-    res.render("students", { insertData: [], classMap: {} });
+    res.render("home", { insertData: [], classes: [] });
   }
 });
 
+// ---------------- Students ----------------
+app.get("/all-students", async (req, res) => {
+  try {
+    const students = await User.find({ status: "accepted" }).populate("classId").lean();
+    const classMap = {};
+    students.forEach(s => {
+      const className = s.classId ? s.classId.name : "Unassigned";
+      if (!classMap[className]) classMap[className] = [];
+      classMap[className].push(s);
+    });
+    res.render("students", { classMap });
+  } catch (err) {
+    console.error(err);
+    res.render("students", { classMap: {} });
+  }
+});
 
 // ---------------- Admission ----------------
-
-// Admission Form
 app.get("/admission", async (req, res) => {
   try {
-    const classes = await Class.find();
+    const classes = await Class.find().lean();
     res.render("admission", { classes });
   } catch {
     res.render("admission", { classes: [] });
   }
 });
 
-// Admission Submission (with password hashing ready)
 app.post("/admission", upload.single("image"), async (req, res) => {
   try {
     const userData = {
@@ -123,7 +109,6 @@ app.post("/admission", upload.single("image"), async (req, res) => {
 
     const newUser = new User(userData);
     await newUser.save();
-
     res.render("success", { applicationId: newUser.applicationId });
   } catch (err) {
     console.error(err);
@@ -131,28 +116,20 @@ app.post("/admission", upload.single("image"), async (req, res) => {
   }
 });
 
-// Admission Conditions
-app.get("/admission/conditions", (req, res) => {
-  res.render("admissionRules");
-});
+app.get("/admission/conditions", (req, res) => res.render("admissionRules"));
 
 // ---------------- User Detail / Password ----------------
-
-// View Student Details
 app.get("/users/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).lean();
     if (!user) return res.send("User not found");
-
     if (req.session.isAdmin) return res.render("detail", { user });
-
     res.render("password", { id: req.params.id });
   } catch {
     res.send("Something went wrong");
   }
 });
 
-// Password Check (hashed password ready)
 app.post("/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -171,7 +148,7 @@ app.post("/users/:id", async (req, res) => {
 app.get("/track", (req, res) => res.render("trackForm"));
 
 app.post("/track", async (req, res) => {
-  const user = await User.findOne({ applicationId: req.body.applicationId });
+  const user = await User.findOne({ applicationId: req.body.applicationId }).lean();
   if (!user) return res.send("Invalid Application ID!");
   res.render("trackResult", { user });
 });
@@ -179,7 +156,7 @@ app.post("/track", async (req, res) => {
 // ---------------- ID Card ----------------
 app.get("/idcard/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).lean();
     res.render("idCard", { user });
   } catch {
     res.status(500).send("Error loading ID card");
@@ -187,8 +164,6 @@ app.get("/idcard/:id", async (req, res) => {
 });
 
 // ---------------- Admin ----------------
-
-// Admin Login
 app.get("/admin/login", (req, res) => res.render("adPassword"));
 
 app.post("/admin/login", (req, res) => {
@@ -199,17 +174,16 @@ app.post("/admin/login", (req, res) => {
   res.send("Wrong Password!");
 });
 
-// Admin Dashboard
 app.get("/admin", isAdmin, async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().lean();
     res.render("admin", { users });
   } catch {
     res.render("admin", { users: [] });
   }
 });
 
-// Add New Class
+// ---------------- Classes ----------------
 app.post("/admin/class/new", isAdmin, upload.single("image"), async (req, res) => {
   try {
     const { name, description, kitab } = req.body;
@@ -218,7 +192,7 @@ app.post("/admin/class/new", isAdmin, upload.single("image"), async (req, res) =
       name,
       description,
       image: req.file ? "/uploads/" + req.file.filename : null,
-      kitab: kitabArray,
+      kitabs: kitabArray,
     });
     await newClass.save();
     res.redirect("/admin/classes");
@@ -227,17 +201,15 @@ app.post("/admin/class/new", isAdmin, upload.single("image"), async (req, res) =
   }
 });
 
-// Show Admin Classes
 app.get("/admin/classes", isAdmin, async (req, res) => {
   try {
-    const classes = await Class.find();
+    const classes = await Class.find().lean();
     res.render("admin_classes", { classes });
   } catch {
     res.send("Error loading classes");
   }
 });
 
-// Delete Class
 app.post("/admin/class/delete/:id", isAdmin, async (req, res) => {
   try {
     const classId = req.params.id;
@@ -249,121 +221,84 @@ app.post("/admin/class/delete/:id", isAdmin, async (req, res) => {
   }
 });
 
-// Class Card Page
 app.get("/classes", async (req, res) => {
   try {
-    const classes = await Class.find();
+    const classes = await Class.find().lean();
     res.render("classes", { classes });
   } catch {
     res.send("Error loading classes");
   }
 });
 
-// Class Details Page
 app.get("/class/:id", async (req, res) => {
   try {
-    const classData = await Class.findById(req.params.id);
+    const classData = await Class.findById(req.params.id).lean();
     if (!classData) return res.send("Class not found");
-
-    const students = await User.find({ classId: req.params.id });
+    const students = await User.find({ classId: req.params.id }).lean();
     res.render("class_details", { classData, students });
   } catch {
     res.send("Error loading class details");
   }
 });
 
-// ---------------- Accept / Edit / Delete User ----------------
-app.post("/accept/:id", isAdmin, async (req, res) => {
-  await User.findByIdAndUpdate(req.params.id, { status: "accepted" });
-  res.redirect("/admin");
-});
-
-app.get("/edit/:id", isAdmin, async (req, res) => {
-  const user = await User.findById(req.params.id);
-  res.render("edit", { user });
-});
-
-app.post("/edit/:id", isAdmin, upload.single("image"), async (req, res) => {
-  try {
-    const updateData = { ...req.body };
-    if (req.file) updateData.image = req.file.path.replace("public", "");
-    await User.findByIdAndUpdate(req.params.id, updateData, { new: true });
-    res.redirect("/admin");
-  } catch {
-    res.send("Update failed!");
-  }
-});
-
-app.post("/delete/:id", isAdmin, async (req, res) => {
-  await User.findByIdAndDelete(req.params.id);
-  res.redirect("/admin");
-});
-
-
-
-// Show Result Upload Page
-// GET Upload Page
-// ---------------- Result Upload ----------------
-
-// ============================
-// 📌 Admin Result Upload (GET)
-// ============================
+// Admin Result Upload - GET
 app.get("/admin/result/upload", isAdmin, async (req, res) => {
   try {
-    const { classId } = req.query;
-    const classes = await Class.find();
-
-    let students = [];
-    let kitabs = [];
-
-    if (classId) {
-      const classInfo = await Class.findById(classId);
-      if (classInfo) {
-        students = await User.find({ classId, status: "accepted" });
-        kitabs = classInfo.kitab || [];
-      }
-    }
-
-    res.render("uploadResult", {
-      classes,
-      selectedClass: classId || "",
-      students,
-      kitabs
-    });
+    const classes = await Class.find().lean();
+    res.render("uploadResult", { classes });
   } catch (err) {
-    console.error("❌ Error loading result upload page:", err);
+    console.error(err);
     res.status(500).send("Error loading result upload page");
   }
 });
 
 
-// ============================
-// 📌 Admin Result Upload (POST)
-// ============================
+// GET /admin/result/upload-form
+app.get("/admin/result/upload-form", isAdmin, async (req, res) => {
+  try {
+    const classes = await Class.find().lean();
+    let students = [];
+    let kitabs = [];
+
+    if (req.query.classId) {
+      const selectedClass = await Class.findById(req.query.classId).lean();
+      if (selectedClass) {
+        students = await User.find({ classId: selectedClass._id }).lean();
+        kitabs = selectedClass.kitab || [];
+      }
+    }
+
+    res.render("uploadResultForm", {
+      classes,
+      students,
+      kitabs,
+      selectedClassId: req.query.classId || "",
+    });
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading upload form");
+  }
+});
+
+
+// ---------------- Admin Result Upload POST ----------------
 app.post("/admin/result/upload", isAdmin, async (req, res) => {
   try {
     const { classId, examMonth, examYear, studentResults } = req.body;
+    if (!studentResults) return res.status(400).send("No results provided");
 
-    for (let s of studentResults) {
-      let totalMarks = 0;
+    for (let studentId in studentResults) {
+      const marksData = studentResults[studentId].marks;
       let subjects = [];
+      let totalMarks = 0;
 
-      if (s.marks && Array.isArray(s.marks)) {
-        s.marks.forEach(m => {
-          let obtained = parseInt(m.obtained) || 0;
-          totalMarks += obtained;
-          subjects.push({
-            kitab: m.kitab,
-            obtainedMark: obtained,
-            fullMark: 100
-          });
-        });
+      for (let kitab in marksData) {
+        const obtained = parseInt(marksData[kitab]) || 0;
+        subjects.push({ kitab, obtainedMark: obtained, fullMark: 100 });
+        totalMarks += obtained;
       }
 
-      // ✅ Pass/Fail
-      const passFail = subjects.every(sub => sub.obtainedMark >= 40) ? "Pass" : "Fail";
-
-      // ✅ Division
+      const passFail = subjects.every(s => s.obtainedMark >= 40) ? "Pass" : "Fail";
       const percentage = subjects.length ? (totalMarks / (subjects.length * 100)) * 100 : 0;
       let division = "Fail";
       if (passFail === "Pass") {
@@ -372,144 +307,180 @@ app.post("/admin/result/upload", isAdmin, async (req, res) => {
         else division = "3rd";
       }
 
+      await Result.findOneAndDelete({ classId, studentId, examMonth, examYear });
+
       await Result.create({
         classId,
-        studentId: s.studentId,
-        examMonth,
-        examYear,
+        studentId,
         subjects,
         totalMarks,
         passFail,
-        division
+        division,
+        examMonth,
+        examYear
       });
     }
 
-    res.redirect(`/result/class/${classId}?examMonth=${examMonth}&examYear=${examYear}`);
+    res.redirect(`/results/view/${classId}?examMonth=${examMonth}&examYear=${examYear}`);
   } catch (err) {
-    console.error("❌ Error uploading results:", err);
+    console.error(err);
     res.status(500).send("Error uploading results");
   }
 });
 
+// ---------------- View Class Result ----------------
 
-// ============================
-// 📌 Single Student Result Card (Admin)
-// ============================
-app.get("/admin/result/:studentId", isAdmin, async (req, res) => {
+app.get("/student/result/:studentId", async (req, res) => {
   try {
     const { studentId } = req.params;
-    const { classId, examMonth, examYear } = req.query;
+    const { classId, examYear } = req.query;
 
-    // Class Info
-    const classInfo = await Class.findById(classId);
+    if (!classId || !examYear) return res.send("Class and Exam Year required");
 
-    // Student Result
-    const result = await Result.findOne({ 
-        classId, 
-        studentId, 
-        examMonth, 
-        examYear 
-      })
-      .populate("studentId", "name");
+    const student = await User.findById(studentId).lean();
+    if (!student) return res.send("Student not found");
 
-    if (!result) {
-      return res.status(404).send("Result not found for this student");
+    const classInfo = await Class.findById(classId).lean();
+    if (!classInfo) return res.send("Class not found");
+
+    const result = await Result.findOne({ studentId, classId, examYear }).lean();
+    if (!result) return res.send("Result not found");
+
+    const allResults = await Result.find({ classId, examYear }).sort({ totalMarks: -1 }).lean();
+    allResults.forEach((r, idx) => r.position = idx + 1);
+    const position = allResults.findIndex(r => r.studentId.toString() === studentId) + 1;
+
+    const kitabs = (classInfo.kitab || []).map(k => k.trim());
+    if (result.subjects) {
+      result.subjects = result.subjects.map(s => ({ ...s, kitab: String(s.kitab).trim() }));
     }
 
-    // Position calculation (Rank inside class)
-    const allResults = await Result.find({ classId, examMonth, examYear })
-      .sort({ totalMarks: -1 });
+    res.render("studentResultCard", { student, classInfo, result, kitabs, position, examYear });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
 
-    let position = allResults.findIndex(r => r.studentId.toString() === studentId) + 1;
-    result.position = position;
+// card download
 
-    // Render result card
-    res.render("result", {
+// ----------------------------
+// ---------------- Student Result PDF ----------------
+app.get("/student/result/:studentId/pdf", async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const { classId, examYear } = req.query;
+
+    if (!classId || !examYear) return res.send("Class and Exam Year required");
+
+    const student = await User.findById(studentId).lean();
+    if (!student) return res.send("Student not found");
+
+    const classInfo = await Class.findById(classId).lean();
+    if (!classInfo) return res.send("Class not found");
+
+    const result = await Result.findOne({ studentId, classId, examYear }).lean();
+    if (!result) return res.send("Result not found");
+
+    const allResults = await Result.find({ classId, examYear }).sort({ totalMarks: -1 }).lean();
+    allResults.forEach((r, idx) => r.position = idx + 1);
+    const position = allResults.findIndex(r => r.studentId.toString() === studentId) + 1;
+
+    const kitabs = (classInfo.kitab || []).map(k => k.trim());
+    if (result.subjects) {
+      result.subjects = result.subjects.map(s => ({ ...s, kitab: String(s.kitab).trim() }));
+    }
+
+    const photoUrl = student.image ? req.protocol + "://" + req.get("host") + student.image : req.protocol + "://" + req.get("host") + "/default.png";
+
+    const ejs = require("ejs");
+    const html = await ejs.renderFile(__dirname + "/views/studentResultCardPDFPremium.ejs", {
+      student: { ...student, image: photoUrl },
       classInfo,
       result,
-      examMonth,
+      kitabs,
+      position,
       examYear
     });
 
+    const puppeteer = require("puppeteer");
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "networkidle0" });
+    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true, margin: { top: "20px", bottom: "20px" } });
+    await browser.close();
+
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${student.name}_Result.pdf"`
+    });
+    res.send(pdfBuffer);
+
   } catch (err) {
-    console.error("❌ Error loading result:", err);
-    res.status(500).send("Error loading result");
+    console.error(err);
+    res.status(500).send("Error generating PDF");
   }
 });
 
 
-// ============================
-// 📌 Class-wise Result Report (Public)
-// ============================
-// ============================
-// 📌 Class-wise Result Report (Public)
-// ============================
-// Class wise result show
-app.get("/result/class/:classId", async (req, res) => {
+
+
+app.get("/results/view", async (req, res) => {
   try {
-    const { classId } = req.params;
+    const { classId, examYear } = req.query;
 
-    // class info আনবো
-    const classInfo = await Class.findById(classId);
+    // Class info
+    const classInfo = await Class.findById(classId).lean();
+    if (!classInfo) return res.send("Class not found");
 
-    // ওই class এর সব result আনবো
-    const results = await Result.find({ classId })
-      .populate({ path: "studentId", select: "name" })
-      .populate("classId");
+    // Results for the class and year
+    const results = await Result.find({ classId, ...(examYear ? { examYear } : {}) })
+      .populate("studentId", "name image applicationId")
+      .lean();
+
+    // Fetch subjects (kitabs)
+    const subjects = await Subject.find({ classId }).lean();
+    const kitabs = subjects.map(s => s.name);
+
+    // Sort by totalMarks descending for position calculation
+    results.sort((a, b) => b.totalMarks - a.totalMarks);
+    results.forEach((r, idx) => {
+      r.position = idx + 1;
+    });
 
     res.render("resultReport", {
       classInfo,
       results,
-      examMonth: results.length > 0 ? results[0].examMonth : "",
-      examYear: results.length > 0 ? results[0].examYear : ""
+      kitabs,
+      examYear: examYear || "",
     });
+
   } catch (err) {
-    console.error("Error loading result:", err);
-    res.status(500).send("Error loading result");
+    console.error(err);
+    res.status(500).send("Server error");
   }
 });
 
 
-
-// Result class list দেখানোর জন্য
+// Select Class & Exam Year page
 app.get("/results", async (req, res) => {
   try {
-    const classes = await Class.find();
-    res.render("resultsClassList", { classes });
+    const classes = await Class.find().lean();
+    res.render("resultsSelect", { classes });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server Error");
-  }
-});
-
-// নির্দিষ্ট class এর result দেখানোর জন্য
-app.get("/results/:classId", async (req, res) => {
-  try {
-    const { classId } = req.params;
-    const { examMonth, examYear } = req.query;
-
-    const classInfo = await Class.findById(classId);
-    const results = await Result.find({ classId, examMonth, examYear })
-      .populate("studentId");
-
-    res.render("resultReport", { classInfo, results, examMonth, examYear });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server Error");
+    res.send("Error loading classes");
   }
 });
 
 
 
 
-
-//----------- Donation ----------------
+// ---------------- Donations & Policy ----------------
 app.get("/donation", (req, res) => res.render("donation"));
-
-// ---------------- Privacy & Terms ----------------
 app.get("/privacy", (req, res) => res.render("privacy"));
 app.get("/terms", (req, res) => res.render("terms"));
 
 // ---------------- Server ----------------
 const port = 8080;
-app.listen(port, () => console.log(`Server running on ${port}`));
+app.listen(port, () => console.log(`✅ Server running on port ${port}`));

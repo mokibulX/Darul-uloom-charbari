@@ -1,36 +1,81 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Result Report</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container mt-5">
-    <div class="text-center mb-4">
-      <h2>Result Report - <%= classInfo ? classInfo.name : "Unknown Class" %></h2>
-      <p><strong>Exam:</strong> <%= examMonth %> <%= examYear %></p>
-    </div>
+<%- include("header") %>
 
-    <table class="table table-bordered text-center">
-      <thead>
+<div class="container my-5">
+
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary">📊 Result Report - <%= classInfo ? classInfo.name : "Unknown Class" %></h1>
+    <% if (examYear) { %>
+      <p class="text-muted fs-5">Exam Year: <%= examYear %></p>
+    <% } %>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped text-center align-middle shadow-sm">
+      <thead class="table-dark">
         <tr>
+          <th>Photo</th>
           <th>Student Name</th>
-          <th>Total Marks</th>
+          <% kitabs.forEach(k => { %>
+            <th><%= k %></th>
+          <% }) %>
+          <th>Total</th>
           <th>Status</th>
           <th>Division</th>
+          <th>Position</th>
         </tr>
       </thead>
       <tbody>
-        <% results.forEach(r => { %>
+        <% results.forEach(res => { %>
           <tr>
-            <td><%= r.studentId ? r.studentId.name : "Unknown Student" %></td>
-            <td><%= r.totalMarks %></td>
-            <td><%= r.passFail %></td>
-            <td><%= r.division %></td>
+            <!-- Photo -->
+            <td>
+              <% if (res.studentId && res.studentId.image) { %>
+                <img src="<%= res.studentId.image %>" alt="Photo" class="rounded-circle" width="50" height="50">
+              <% } else { %>
+                <img src="/default.png" alt="Photo" class="rounded-circle" width="50" height="50">
+              <% } %>
+            </td>
+
+            <!-- Student Name with link -->
+            <td class="text-start">
+              <% if (res.studentId) { %>
+                <a href="/student/result/<%= res.studentId._id %>?classId=<%= classInfo._id %>&examYear=<%= examYear %>" class="text-decoration-none">
+                  <%= res.studentId.name %>
+                </a>
+              <% } else { %>
+                Unknown
+              <% } %>
+            </td>
+
+            <!-- Kitab marks -->
+            <% kitabs.forEach(k => { 
+                 const subData = res.subjects ? res.subjects.find(s => s.kitab === k) : null;
+            %>
+              <td><%= subData ? subData.obtainedMark : '-' %></td>
+            <% }) %>
+
+            <!-- Total / Status / Division / Position -->
+            <td><%= res.totalMarks || 0 %></td>
+            <td><%= res.passFail || '-' %></td>
+            <td><%= res.division || '-' %></td>
+            <td><%= res.position || '-' %></td>
           </tr>
         <% }) %>
+
+        <!-- No results -->
+        <% if (results.length === 0) { %>
+          <tr>
+            <td colspan="<%= 7 + kitabs.length %>" class="text-muted">🚫 No results found</td>
+          </tr>
+        <% } %>
       </tbody>
     </table>
   </div>
-</body>
-</html>
+
+  <div class="mt-3">
+    <a href="/results" class="btn btn-secondary w-100">Back to Class Selection</a>
+  </div>
+
+</div>
+
+<%- include("footer") %>
