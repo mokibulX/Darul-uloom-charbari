@@ -274,7 +274,12 @@ app.get("/class/:id", async (req, res) => {
 app.get("/admin/result/upload", isAdmin, async (req, res) => {
   try {
     const classes = await Class.find().lean();
-    res.render("uploadResult", { classes });
+    res.render("uploadResultForm", { 
+      classes, 
+      selectedClassId: "", 
+      students: [],   // ⚡ Always defined
+      kitabs: []      // ⚡ Always defined
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error loading result upload page");
@@ -283,17 +288,30 @@ app.get("/admin/result/upload", isAdmin, async (req, res) => {
 
 
 // GET /admin/result/upload-form
+// GET /admin/result/upload-form
+// ---------------- GET: Admin Result Upload Form ----------------
 app.get("/admin/result/upload-form", isAdmin, async (req, res) => {
   try {
+    // সব ক্লাস আনুন
     const classes = await Class.find().lean();
+
     let students = [];
     let kitabs = [];
+    let selectedClassId = req.query.classId || "";
 
-    if (req.query.classId) {
-      const selectedClass = await Class.findById(req.query.classId).lean();
+    if (selectedClassId) {
+      // সিলেক্ট করা ক্লাস
+      const selectedClass = await Class.findById(selectedClassId).lean();
+
       if (selectedClass) {
-        students = await User.find({ classId: selectedClass._id }).lean();
-        kitabs = selectedClass.kitab || [];
+        // ক্লাসে সব accepted student আনুন
+        students = await User.find({
+          classId: selectedClass._id,
+          status: "accepted"
+        }).lean();
+
+        // kitabs array
+        kitabs = Array.isArray(selectedClass.kitabs) ? selectedClass.kitabs : [];
       }
     }
 
@@ -301,10 +319,11 @@ app.get("/admin/result/upload-form", isAdmin, async (req, res) => {
       classes,
       students,
       kitabs,
-      selectedClassId: req.query.classId || "",
+      selectedClassId
     });
+
   } catch (err) {
-    console.error(err);
+    console.error("Error in upload-form route:", err);
     res.send("Error loading upload form");
   }
 });
