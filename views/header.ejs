@@ -1,115 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Navbar with Dropdown</title>
-   
-    <style>
-      body {
-  font-family: 'Poppins', sans-serif;
-}
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600; /* slightly bolder for headings */
-}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar with Dropdown</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS (assumed already in your header.ejs) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Animate.css -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto Slab', serif;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      min-height: 100vh;
+    }
 
-    </style>
-              <!-- font cdn link  -->
+    .navbar {
+      background: linear-gradient(90deg, #1a2a6c, #2c3e50);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      padding: 1.2rem 0;
+    }
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    .navbar-brand {
+      font-weight: 700;
+      color: #ffd700 !important;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
+    .navbar-brand img {
+      border-radius: 8px;
+      border: 2px solid #ffd700;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
+    .navbar-brand:hover img {
+      transform: scale(1.15);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-      <div class="container-fluid">
-        <!-- Logo / Brand -->
-        <a class="navbar-brand fw-bold" href="/">
-          <img src="/images/logo.png" alt="Logo" height="40" class="d-inline-block align-text-top me-2">
-          Darul Uloom Charbari (Gazarikandi)
-        </a>
+    .navbar-brand:hover {
+      color: #f1c40f !important;
+      transform: translateY(-2px);
+    }
 
-        <!-- Toggler -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-          aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    .nav-link {
+      color: #e8ecef !important;
+      font-weight: 500;
+      font-size: 1.15rem;
+      padding: 0.6rem 1.2rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
 
-        <!-- Nav links -->
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav ms-auto">
-            <!-- Home -->
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
-            </li>
+    .nav-link:hover, .nav-link.active {
+      color: #ffd700 !important;
+      background: rgba(255, 215, 0, 0.1);
+      border-radius: 8px;
+    }
 
-            <!-- Admission Dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="admissionDropdown"
-                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Admission
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="admissionDropdown">
-                <li><a class="dropdown-item" href="/admission">Form</a></li>
-                <li><a class="dropdown-item" href="/track">Check Status</a></li>
-              </ul>
-            </li>
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 50%;
+      background: #ffd700;
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
 
-            <!-- Details Dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="detailsDropdown"
-                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Details
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="detailsDropdown">
-                <li><a class="dropdown-item" href="/classes">Classes</a></li>
-                <li><a class="dropdown-item" href="/results">Results</a></li>
-                <li><a class="dropdown-item" href="/all-students">All Students</a></li>
-              </ul>
-            </li>
+    .nav-link:hover::after, .nav-link.active::after {
+      width: 50%;
+    }
 
-            <!-- Contact Dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="contactDropdown"
-                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Contact
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="contactDropdown">
-                <li><a class="dropdown-item" href="/contact/office">Office</a></li>
-                <li><a class="dropdown-item" href="/contact/support">Support</a></li>
-                <li><a class="dropdown-item" href="/contact/help">Help</a></li>
-              </ul>
-            </li>
+    .dropdown-toggle::after {
+      border-color: #e8ecef;
+      transition: border-color 0.3s ease;
+    }
 
-            <!-- Donation Dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="donationDropdown"
-                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Donation
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="donationDropdown">
-                <li><a class="dropdown-item" href="/donation/general">General</a></li>
-                <li><a class="dropdown-item" href="/donation/zakat">Zakat</a></li>
-                <li><a class="dropdown-item" href="/donation/scholarship">Scholarship</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+    .dropdown-menu {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      border: 1px solid #ffd700;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      padding: 0.75rem 0;
+      margin-top: 0.6rem;
+      animation: fadeInDown 0.3s ease;
+    }
+
+    .dropdown-item {
+      color: #1a2a6c;
+      font-weight: 500;
+      padding: 0.8rem 1.75rem;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+      background: linear-gradient(90deg, #ffd700, #f1c40f);
+      color: #1a2a6c;
+      border-radius: 8px;
+    }
+
+    .navbar-toggler {
+      border: none;
+      padding: 0.6rem;
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 215, 0, 0.9)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .navbar-collapse {
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 991px) {
+      .navbar-nav {
+        padding: 1.2rem;
+        background: linear-gradient(90deg, #1a2a6c, #2c3e50);
+        border-radius: 12px;
+        margin-top: 0.6rem;
+      }
+
+      .nav-link {
+        padding: 0.8rem;
+        font-size: 1.05rem;
+      }
+
+      .dropdown-menu {
+        background: #f8f9fa;
+        box-shadow: none;
+        border: none;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar-brand {
+        font-size: 1.3rem;
+      }
+
+      .navbar-brand img {
+        height: 35px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <!-- Logo / Brand -->
+      <a class="navbar-brand animate__animated animate__fadeIn" href="/">
+        <img src="/images/logo.png" alt="Logo" height="45" class="d-inline-block align-text-top me-3">
+        Darul Uloom Charbari (Gazarikandi)
+      </a>
+
+      <!-- Toggler -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav links -->
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto animate__animated animate__fadeInRight">
+          <!-- Home -->
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+
+          <!-- Admission Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="admissionDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Admission
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="admissionDropdown">
+              <li><a class="dropdown-item" href="/admission">Form</a></li>
+              <li><a class="dropdown-item" href="/track">Check Status</a></li>
+            </ul>
+          </li>
+
+          <!-- Details Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="detailsDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Details
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="detailsDropdown">
+              <li><a class="dropdown-item" href="/classes">Classes</a></li>
+              <li><a class="dropdown-item" href="/results">Results</a></li>
+              <li><a class="dropdown-item" href="/all-students">All Students</a></li>
+            </ul>
+          </li>
+
+          <!-- Contact Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="contactDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Contact
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="contactDropdown">
+              <li><a class="dropdown-item" href="/contact/office">Office</a></li>
+              <li><a class="dropdown-item" href="/contact/support">Support</a></li>
+              <li><a class="dropdown-item" href="/contact/help">Help</a></li>
+            </ul>
+          </li>
+
+          <!-- Donation Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="donationDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Donation
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="donationDropdown">
+              <li><a class="dropdown-item" href="/donation/general">General</a></li>
+              <li><a class="dropdown-item" href="/donation/zakat">Zakat</a></li>
+              <li><a class="dropdown-item" href="/donation/scholarship">Scholarship</a></li>
+            </ul>
+          </li>
+        </ul>
       </div>
-    </nav>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+    </div>
+  </nav>
+
+  <!-- Bootstrap JS and Popper.js -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
 </html>

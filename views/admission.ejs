@@ -1,163 +1,364 @@
 <%- include('header') %>
 
-<div class="container py-4">
-  <div class="text-center mb-4">
-    <h3 class="fw-bold">Darul Uloom Charbari (Gazarikandi) Madrassa</h3>
-    <h4 class="text-muted">Admission Form</h4>
+<body style="background: linear-gradient(135deg, #1e3c72, #2a5298, #0f2027);">
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-light display-5" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+        Darul Uloom Charbari (Gazarikandi) Madrassa
+      </h2>
+      <h5 class="text-light opacity-75">📑 Student Admission Form</h5>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <form id="admissionForm" action="/admission" method="POST" 
+            class="row g-4 shadow-lg p-4 p-md-5 rounded-4 needs-validation"
+            style="max-width: 900px; width: 100%; background: linear-gradient(145deg, #ffffff, #e6f0fa);"
+            enctype="multipart/form-data" novalidate>
+        
+        <!-- Admission Conditions -->
+        <div class="col-12 mb-4">
+          <label class="form-label fw-bold text-dark"> <a href="/admission/conditions">Admission Conditions</a>:</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="agreeAll" name="agreeAll" value="true" required>
+            <label class="form-check-label" for="agreeAll">✅ I have read and agree</label>
+            <div class="invalid-feedback">⚠️ You must agree before submitting.</div>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="disagreeAll" name="agreeAll" value="false" required>
+            <label class="form-check-label" for="disagreeAll">❌ I do not agree</label>
+          </div>
+        </div>
+
+        <!-- Student Type -->
+        <div class="col-md-4">
+          <label class="form-label text-dark fw-semibold">Student Type:</label>
+          <select name="type" class="form-select bg-light border-0 shadow-sm" required>
+            <option value="">--Select--</option>
+            <option value="new">New</option>
+            <option value="old">Old</option>
+          </select>
+          <div class="valid-feedback">✅ Looks good!</div>
+          <div class="invalid-feedback">⚠️ Please select student type.</div>
+        </div>
+
+        <!-- Class -->
+        <div class="col-md-4">
+          <label class="form-label text-dark fw-semibold">Class:</label>
+          <select name="classId" class="form-select bg-light border-0 shadow-sm" required>
+            <option value="">--Select Class--</option>
+            <% classes.forEach(cls => { %>
+              <option value="<%= cls._id %>"><%= cls.name %></option>
+            <% }) %>
+          </select>
+          <div class="valid-feedback">✅ Looks good!</div>
+          <div class="invalid-feedback">⚠️ Class is required.</div>
+        </div>
+
+        <!-- Previous Class -->
+        <div class="col-md-4">
+          <label for="prevClass" class="form-label text-dark fw-semibold">Previous Class:</label>
+          <input type="text" id="prevClass" name="prevClass" class="form-control bg-light border-0 shadow-sm">
+          <div class="valid-feedback">✅ Okay</div>
+           <div class="invalid-feedback">⚠️ Previous Class is required.</div>
+        </div>
+
+        <!-- Name & Father -->
+        <div class="col-md-6">
+          <label for="name" class="form-label text-dark fw-semibold">Name:</label>
+          <input type="text" id="name" name="name" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Looks good!</div>
+          <div class="invalid-feedback">⚠️ Please enter name.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="sonOf" class="form-label text-dark fw-semibold">Father's Name:</label>
+          <input type="text" id="sonOf" name="sonOf" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Perfect!</div>
+          <div class="invalid-feedback">⚠️ Please enter father's name.</div>
+        </div>
+
+        <!-- DOB & Age -->
+        <div class="col-md-6">
+          <label for="dateOfbrith" class="form-label text-dark fw-semibold">Date of Birth:</label>
+          <input type="date" id="dateOfbrith" name="dateOfbrith" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ Select DOB.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="age" class="form-label text-dark fw-semibold">Age:</label>
+          <input type="number" id="age" name="age" class="form-control bg-light border-4 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ Enter valid age.</div>
+        </div>
+
+        <!-- Address -->
+        <div class="col-md-6">
+          <label for="vill" class="form-label text-dark fw-semibold">Village:</label>
+          <input type="text" id="vill" name="vill" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ Village required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="post" class="form-label text-dark fw-semibold">Post:</label>
+          <input type="text" id="post" name="post" class="form-control bg-light border-0 shadow-sm">
+        </div>
+        <div class="col-md-6">
+          <label for="police" class="form-label text-dark fw-semibold">Police Station:</label>
+          <input type="text" id="police" name="police" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ Police Station required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="distric" class="form-label text-dark fw-semibold">District:</label>
+          <input type="text" id="distric" name="distric" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ District required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="state" class="form-label text-dark fw-semibold">State:</label>
+          <input type="text" id="state" name="state" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ State required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="country" class="form-label text-dark fw-semibold">Country:</label>
+          <input type="text" id="country" name="country" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ Country required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="pin" class="form-label text-dark fw-semibold">PIN:</label>
+          <input type="number" id="pin" name="pin" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ PIN required.</div>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-6">
+          <label for="phone" class="form-label text-dark fw-semibold">Phone:</label>
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-light border-0"><i class="bi bi-telephone-fill"></i></span>
+            <input type="number" id="phone" name="phone" class="form-control bg-light border-0 shadow-sm" required>
+            <div class="valid-feedback">✅ Phone valid</div>
+            <div class="invalid-feedback">⚠️ Enter phone number.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="email" class="form-label text-dark fw-semibold">Email:</label>
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-light border-0"><i class="bi bi-envelope-fill"></i></span>
+            <input type="email" id="email" name="email" class="form-control bg-light border-0 shadow-sm">
+            <div class="valid-feedback">✅ Okay</div>
+            <div class="invalid-feedback">⚠️ Invalid email.</div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="col-md-6">
+          <label for="password" class="form-label text-dark fw-semibold">Password:</label>
+          <div class="input-group">
+            <input type="password" id="password" name="password" class="form-control bg-light border-0 shadow-sm" required minlength="6">
+            <button class="btn btn-outline-dark" type="button" id="togglePassword"><i class="bi bi-eye"></i></button>
+            <div class="valid-feedback">✅ Strong enough</div>
+            <div class="invalid-feedback">⚠️ Password must be 6+ chars.</div>
+          </div>
+        </div>
+
+        <!-- Photo -->
+        <div class="col-12">
+          <label class="form-label text-dark fw-semibold">Photo:</label>
+          <input type="file" name="image" accept="image/*" class="form-control bg-light border-0 shadow-sm" required>
+          <div class="invalid-feedback">⚠️ Upload your photo.</div>
+        </div>
+
+        <!-- Payment -->
+        <div class="col-md-6">
+          <label class="form-label text-dark fw-semibold">Payment Method:</label>
+          <select id="paymentMethod" name="payment" class="form-select bg-light border-0 shadow-sm" required>
+            <option value="">--Select--</option>
+            <option value="offline">Offline</option>
+            <option value="online">Online</option>
+          </select>
+          <div class="valid-feedback">✅ Okay</div>
+          <div class="invalid-feedback">⚠️ Select payment method.</div>
+        </div>
+        <div class="col-md-6 d-none" id="offlineBox">
+          <label class="form-label text-dark fw-semibold">Amount (Offline):</label>
+          <input type="number" name="amount" id="offlineAmount" class="form-control bg-light border-0 shadow-sm" placeholder="Enter Amount">
+          <div class="invalid-feedback">⚠️ Enter amount</div>
+        </div>
+
+        <!-- Submit -->
+        <div class="col-12 text-center">
+          <button type="submit" class="btn btn-primary btn-lg px-5 mt-4" 
+                  style="border-radius: 30px; background: linear-gradient(90deg, #ff416c, #ff4b2b); border: none;"
+                  onmouseover="this.style.opacity='0.9'" 
+                  onmouseout="this.style.opacity='1'">
+            🚀 Submit Admission
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
-  <div class="d-flex justify-content-center">
-    <form action="/admission" method="POST" class="row g-3 shadow p-4 rounded bg-light"
-          style="max-width: 650px; width: 100%" enctype="multipart/form-data">
-
-      <a href="/admission/conditions" class="btn btn-link">View Admission Conditions</a>
-
-      <!-- Admission Conditions -->
-      <div class="mb-3">
-        <label class="form-label d-block">Admission Conditions:</label>
-        <div>
-          <input type="radio" id="agreeAll" name="agreeAll" value="true" required />
-          <label for="agreeAll">I have read and agree</label>
-        </div>
-        <div>
-          <input type="radio" id="disagreeAll" name="agreeAll" value="false" required />
-          <label for="disagreeAll">I do not agree</label>
+  <!-- Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center border-0" style="background: linear-gradient(145deg, #d4edda, #c3e6cb);">
+        <div class="modal-body p-5">
+          <h4 class="text-success fw-bold">🎉 Form Submitted Successfully!</h4>
+          <p class="text-dark">Your admission request has been sent.</p>
+          <button type="button" class="btn btn-success px-4" style="border-radius: 20px;" data-bs-dismiss="modal">OK</button>
         </div>
       </div>
+    </div>
+  </div> 
 
-      <!-- Student Type -->
-      <div class="col-md-4">
-        <label class="form-label">Student Type:</label>
-        <select name="type" class="form-select" required>
-          <option value="new">New</option>
-          <option value="old">Old</option>
-        </select>
+  <!-- Error Modal -->
+  <div class="modal fade" id="errorModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center border-0" style="background: linear-gradient(145deg, #f8d7da, #f5c6cb);">
+        <div class="modal-body p-5">
+          <h4 class="text-danger fw-bold">⚠️ Please fix the errors!</h4>
+          <p class="text-dark">Check required fields and try again.</p>
+          <button type="button" class="btn btn-danger px-4" style="border-radius: 20px;" data-bs-dismiss="modal">OK</button>
+        </div>
       </div>
-
-      <!-- Class Dropdown -->
-      <div class="col-md-4">
-        <label class="form-label">Class:</label>
-        <select name="classId" class="form-select" required>
-          <option value="">--Select Class--</option>
-          <% classes.forEach(cls => { %>
-            <option value="<%= cls._id %>"><%= cls.name %></option>
-          <% }) %>
-        </select>
-      </div>
-
-      <div class="col-md-4">
-        <label for="prevClass" class="form-label">Previous Class:</label>
-        <input type="text" id="prevClass" name="prevClass" class="form-control" />
-      </div>
-
-      <!-- Name & Father -->
-      <div class="col-md-6">
-        <label for="name" class="form-label">Name:</label>
-        <input type="text" id="name" name="name" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="sonOf" class="form-label">Father's Name:</label>
-        <input type="text" id="sonOf" name="sonOf" class="form-control" required />
-      </div>
-
-      <!-- DOB & Age -->
-      <div class="col-md-6">
-        <label for="dateOfbrith" class="form-label">Date of Birth:</label>
-        <input type="date" id="dateOfbrith" name="dateOfbrith" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="age" class="form-label">Age:</label>
-        <input type="number" id="age" name="age" class="form-control" required />
-      </div>
-
-      <!-- Address -->
-      <div class="col-md-6">
-        <label for="vill" class="form-label">Village:</label>
-        <input type="text" id="vill" name="vill" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="post" class="form-label">Post:</label>
-        <input type="text" id="post" name="post" class="form-control" />
-      </div>
-      <div class="col-md-6">
-        <label for="police" class="form-label">Police Station:</label>
-        <input type="text" id="police" name="police" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="distric" class="form-label">District:</label>
-        <input type="text" id="distric" name="distric" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="state" class="form-label">State:</label>
-        <input type="text" id="state" name="state" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="country" class="form-label">Country:</label>
-        <input type="text" id="country" name="country" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="pin" class="form-label">PIN:</label>
-        <input type="number" id="pin" name="pin" class="form-control" required />
-      </div>
-
-      <!-- Contact & Password -->
-      <div class="col-md-6">
-        <label for="phone" class="form-label">Phone:</label>
-        <input type="number" id="phone" name="phone" class="form-control" required />
-      </div>
-      <div class="col-md-6">
-        <label for="email" class="form-label">Email:</label>
-        <input type="email" id="email" name="email" class="form-control" />
-      </div>
-      <div class="col-md-6">
-        <label for="password" class="form-label">Password:</label>
-        <input type="password" id="password" name="password" class="form-control" required />
-      </div>
-
-      <!-- Photo -->
-      <div class="col-md-12">
-        <label class="form-label">Photo:</label>
-        <input type="file" name="image" accept="image/*" class="form-control" required />
-      </div>
-
-      <!-- Payment -->
-      <div class="col-md-6">
-        <label class="form-label">Payment Method:</label>
-        <select id="paymentMethod" name="payment" class="form-select" required>
-          <option value="">--Select--</option>
-          <option value="offline">Offline</option>
-          <option value="online">Online</option>
-        </select>
-      </div>
-      <div class="col-md-6 d-none" id="offlineBox">
-        <label class="form-label">Amount (Offline):</label>
-        <input type="number" name="amount" id="offlineAmount" class="form-control" placeholder="Enter Amount" />
-      </div>
-
-      <div class="col-12 text-center">
-        <button type="submit" class="btn btn-primary px-4 mt-4">Submit Admission</button>
-      </div>
-    </form>
+    </div>
   </div>
-</div>
 
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <script>
+    // Payment method toggle
+    const paymentMethod = document.getElementById("paymentMethod");
+    const offlineBox = document.getElementById("offlineBox");
+    const offlineAmount = document.getElementById("offlineAmount");
 
- <%- include('footer') %>
+    paymentMethod.addEventListener("change", function () {
+      if (this.value === "offline") {
+        offlineBox.classList.remove("d-none");
+        offlineAmount.value = 500;
+        offlineAmount.required = true;
+      } else {
+        offlineBox.classList.add("d-none");
+        offlineAmount.value = "";
+        offlineAmount.required = false;
+      }
+    });
 
-<script>
-const paymentMethod = document.getElementById("paymentMethod");
-const offlineBox = document.getElementById("offlineBox");
-const offlineAmount = document.getElementById("offlineAmount");
+    // Password visibility toggle
+    document.getElementById("togglePassword").addEventListener("click", function () {
+      const passwordInput = document.getElementById("password");
+      const toggleIcon = this.querySelector("i");
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleIcon.classList.remove("bi-eye");
+        toggleIcon.classList.add("bi-eye-slash");
+      } else {
+        passwordInput.type = "password";
+        toggleIcon.classList.remove("bi-eye-slash");
+        toggleIcon.classList.add("bi-eye");
+      }
+    });
 
-paymentMethod.addEventListener("change", function () {
-  if (this.value === "offline") {
-    offlineBox.classList.remove("d-none");
-    offlineAmount.value = 500;
-  } else {
-    offlineBox.classList.add("d-none");
-    offlineAmount.value = "";
-  }
-});
-</script>
+    // Real-time validation and form handling
+    (() => {
+      'use strict';
+      const form = document.getElementById('admissionForm');
+      form.querySelectorAll("input, select").forEach(el => {
+        el.addEventListener("input", () => {
+          if (el.checkValidity()) {
+            el.classList.add("is-valid");
+            el.classList.remove("is-invalid");
+          } else {
+            el.classList.add("is-invalid");
+            el.classList.remove("is-valid");
+          }
+        });
+      });
 
+      form.addEventListener('submit', event => {
+       // Prevent default form submission
+        if (!form.checkValidity()) {
+          event.stopPropagation();
+          new bootstrap.Modal(document.getElementById('errorModal')).show();
+        } else {
+          new bootstrap.Modal(document.getElementById('successModal')).show();
+          // Optionally, submit the form via AJAX
+          /*
+          const formData = new FormData(form);
+          fetch('/admission', {
+            method: 'POST',
+            body: formData
+          }).then(response => {
+            if (response.ok) {
+              new bootstrap.Modal(document.getElementById('successModal')).show();
+            } else {
+              new bootstrap.Modal(document.getElementById('errorModal')).show();
+            }
+          });
+          */
+        }
+        form.classList.add('was-validated');
+      }, false);
+    })();
+  </script>
 
+  <style>
+    body {
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .form-control, .form-select {
+      transition: all 0.3s ease;
+      border-radius: 10px;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #ff416c;
+      box-shadow: 0 0 10px rgba(255, 65, 108, 0.5);
+      background: #f8f9fa;
+    }
+    .form-label {
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary {
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #ff4b2b, #ff416c);
+      transform: translateY(-2px);
+    }
+    .form-check-input:checked {
+      background-color: #ff416c;
+      border-color: #ff416c;
+    }
+    .shadow-lg {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+      transition: transform 0.3s ease;
+    }
+    .shadow-lg:hover {
+      transform: translateY(-5px);
+    }
+    .input-group-text {
+      border-radius: 10px 0 0 10px;
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      h2.display-5 {
+        font-size: 2rem;
+      }
+      .form-check-inline {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+<%- include('footer') %>
+</body>

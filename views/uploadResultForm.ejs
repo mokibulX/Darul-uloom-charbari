@@ -6,45 +6,62 @@
   <form action="/admin/result/upload" method="post">
 
     <!-- Class Select -->
-    <div class="mb-3">
-      <label for="classId" class="form-label fw-bold">Select Class</label>
-      <select id="classId" name="classId" class="form-select" required onchange="this.form.submit()">
-        <option value="">-- Select Class --</option>
-        <% classes.forEach(c => { %>
-          <option value="<%= c._id %>" <%= c._id == selectedClassId ? "selected" : "" %>><%= c.name %></option>
-        <% }) %>
-      </select>
-    </div>
-
-    <!-- Exam Month -->
-    <div class="mb-3">
-      <label for="examMonth" class="form-label fw-bold">Exam Month</label>
-      <input type="text" id="examMonth" name="examMonth" class="form-control" placeholder="e.g. June" required>
-    </div>
-
-    <!-- Exam Year -->
-    <div class="mb-3">
-      <label for="examYear" class="form-label fw-bold">Exam Year</label>
-      <input type="number" id="examYear" name="examYear" class="form-control" placeholder="e.g. 2025" required>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="classId" class="form-label fw-bold">Select Class</label>
+        <select id="classId" name="classId" class="form-select" required onchange="this.form.submit()">
+          <option value="">-- Select Class --</option>
+          <% classes.forEach(c => { %>
+            <option value="<%= c._id %>" <%= c._id == selectedClassId ? "selected" : "" %>>
+              <%= c.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="examMonth" class="form-label fw-bold">Exam Month</label>
+        <input type="text" id="examMonth" name="examMonth" class="form-control" placeholder="e.g. June" required>
+      </div>
+      <div class="col-md-4">
+        <label for="examYear" class="form-label fw-bold">Exam Year</label>
+        <input type="number" id="examYear" name="examYear" class="form-control" placeholder="e.g. 2025" required>
+      </div>
     </div>
 
     <% if (students.length > 0 && kitabs.length > 0) { %>
-      <hr>
-      <% students.forEach(student => { %>
-        <div class="mb-4 p-3 border rounded">
-          <h5 class="fw-bold text-secondary"><%= student.name %> (App ID: <%= student.applicationId %>)</h5>
-          <% kitabs.forEach(kitab => { %>
-            <div class="mb-2">
-              <label class="form-label"><%= kitab %> Marks</label>
-              <input type="number" name="studentResults[<%= student._id %>][marks][<%= kitab %>]" class="form-control" placeholder="Enter marks" required>
-            </div>
-          <% }) %>
-        </div>
-      <% }) %>
-    <% } %>
-
-    <% if (students.length > 0) { %>
-      <button type="submit" class="btn btn-success w-100">Upload Results</button>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>Student Name</th>
+              <th>Application ID</th>
+              <% kitabs.forEach(kitab => { %>
+                <th><%= kitab %> (Marks)</th>
+              <% }) %>
+            </tr>
+          </thead>
+          <tbody>
+            <% students.forEach(student => { %>
+              <tr>
+                <td class="fw-bold"><%= student.name %></td>
+                <td><%= student.applicationId %></td>
+                <% kitabs.forEach(kitab => { %>
+                  <td>
+                    <input 
+                      type="number" 
+                      class="form-control text-center" 
+                      name="studentResults[<%= student._id %>][marks][<%= kitab %>]" 
+                      placeholder="0-100"
+                      required
+                    >
+                  </td>
+                <% }) %>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn btn-success w-100 mt-3">✅ Upload Results</button>
     <% } %>
 
   </form>

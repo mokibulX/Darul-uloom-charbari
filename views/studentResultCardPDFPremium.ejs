@@ -2,16 +2,17 @@
 
   <!-- Header Card -->
   <div style="display:flex; align-items:center; margin-bottom:30px;">
-    <img src="<%= student.image ? student.image : '/default.png' %>" 
+    <img src="<%= student && student.image ? student.image : '/default.png' %>" 
          style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #007bff; margin-right:20px;">
     <div>
-      <h2 style="margin:0; color:#007bff; font-size:1.8em;"><%= student.name %></h2>
-      <p style="margin:3px 0; font-size:0.95em;"><strong>Application ID:</strong> <%= student.applicationId %></p>
-      <p style="margin:3px 0; font-size:0.95em;"><strong>Class:</strong> <%= classInfo.name %></p>
+      <h2 style="margin:0; color:#007bff; font-size:1.8em;"> Darul Uloom Charbari Annual Exam <%= examYear %></h2>
+      <h3 style="margin:5px 0; color:#343a40; font-size:1.4em;"> <%= student ? student.name : "Unknown" %></h3>
+      <p style="margin:3px 0; font-size:0.95em;"><strong>Application ID:</strong> <%= student ? student.applicationId : '-' %></p>
+      <p style="margin:3px 0; font-size:0.95em;"><strong>Class:</strong> <%= classInfo ? classInfo.name : '-' %></p>
       <p style="margin:3px 0; font-size:0.95em;"><strong>Exam Year:</strong> <%= examYear %></p>
       <p style="margin:3px 0; font-size:0.95em;">
         <strong>Position:</strong> 
-        <span style="background:#17a2b8; color:white; padding:4px 10px; border-radius:12px; font-weight:bold;"><%= position %></span>
+        <span style="background:#17a2b8; color:white; padding:4px 10px; border-radius:12px; font-weight:bold;"><%= position || '-' %></span>
       </p>
     </div>
   </div>
@@ -22,16 +23,28 @@
       <tr>
         <th style="padding:12px; text-align:left;">Subject / Kitab</th>
         <th style="padding:12px; text-align:center;">Obtained Marks</th>
+        <th style="padding:12px; text-align:center;">Pass Marks</th>
         <th style="padding:12px; text-align:center;">Full Marks</th>
       </tr>
     </thead>
     <tbody>
       <% kitabs.forEach(sub => { 
-           const subData = result.subjects.find(s => s.kitab === sub); 
+           const subData = result && result.subjects ? result.subjects.find(s => s.kitab === sub) : null; 
       %>
       <tr style="background:#f7f7f7;">
         <td style="padding:12px; text-align:left; font-weight:600;"><%= sub %></td>
         <td style="padding:12px; text-align:center; font-weight:bold; color:#007bff;"><%= subData ? subData.obtainedMark : '-' %></td>
+        <td style="padding:12px; text-align:center;">
+          <% if (subData) { %>
+            <% if (subData.obtainedMark >= 33) { %>
+              <span style="display:inline-block; background:#28a745; color:white; padding:4px 10px; border-radius:10px; font-size:0.85em;">33</span>
+            <% } else { %>
+              <span style="display:inline-block; background:#dc3545; color:white; padding:4px 10px; border-radius:10px; font-size:0.85em;">Fail</span>
+            <% } %>
+          <% } else { %>
+            -
+          <% } %>
+        </td>
         <td style="padding:12px; text-align:center; font-weight:600;"><%= subData ? subData.fullMark : '-' %></td>
       </tr>
       <% }) %>
@@ -39,15 +52,17 @@
       <!-- Total Row -->
       <tr style="background:#e2e3e5; font-weight:bold;">
         <td style="padding:12px;">Total</td>
-        <td colspan="2" style="text-align:center; color:#007bff; padding:12px;"><%= result.totalMarks %></td>
+        <td colspan="3" style="text-align:center; color:#007bff; padding:12px;"><%= result ? result.totalMarks : 0 %></td>
       </tr>
 
       <!-- Status Row -->
       <tr style="font-weight:bold;">
         <td style="padding:12px;">Status</td>
-        <td colspan="2" style="text-align:center; padding:12px;">
-          <% if(result.passFail==='Pass'){ %>
+        <td colspan="3" style="text-align:center; padding:12px;">
+          <% if(result && result.passFail==='Pass'){ %>
             <span style="display:inline-block; background:#28a745; color:white; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.95em;">✅ Pass</span>
+          <% } else if(result && result.passFail === "Out of Consideration") { %>
+            <span style="display:inline-block; background:#ffc107; color:black; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.95em;">⚠️ Out of Consideration</span>
           <% } else { %>
             <span style="display:inline-block; background:#dc3545; color:white; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.95em;">❌ Fail</span>
           <% } %>
@@ -57,8 +72,16 @@
       <!-- Division Row -->
       <tr style="font-weight:bold;">
         <td style="padding:12px;">Division</td>
-        <td colspan="2" style="text-align:center; padding:12px;">
-          <span style="display:inline-block; background:#ffc107; color:#212529; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.95em;"><%= result.division %></span>
+        <td colspan="3" style="text-align:center; padding:12px;">
+          <% if(result && result.division === "1st"){ %>
+            <span style="display:inline-block; background:#28a745; color:white; padding:6px 14px; border-radius:12px; font-weight:bold;">🥇 1st Division</span>
+          <% } else if(result && result.division === "2nd"){ %>
+            <span style="display:inline-block; background:#17a2b8; color:white; padding:6px 14px; border-radius:12px; font-weight:bold;">🥈 2nd Division</span>
+          <% } else if(result && result.division === "3rd"){ %>
+            <span style="display:inline-block; background:#6c757d; color:white; padding:6px 14px; border-radius:12px; font-weight:bold;">🥉 3rd Division</span>
+          <% } else { %>
+            <span style="display:inline-block; background:#dc3545; color:white; padding:6px 14px; border-radius:12px; font-weight:bold;">Fail</span>
+          <% } %>
         </td>
       </tr>
     </tbody>

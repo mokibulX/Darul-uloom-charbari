@@ -7,40 +7,47 @@
     <div class="carousel-inner">
       <% for(let i=1; i<=5; i++){ %>
       <div class="carousel-item <%= i===1 ? 'active' : '' %>">
-        <img src="/images/carousel<%=i%>.jpg" class="d-block w-100" alt="Slide <%=i%>" style="height:500px; object-fit:cover;">
+        <img src="/images/carousel<%=i%>.jpg" class="d-block w-100" alt="Slide <%=i%>" style="height: 600px; object-fit: cover;">
+        <div class="carousel-caption d-none d-md-block" style="background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 1rem;">
+          <h3 class="fw-bold text-light">Welcome to Darul Uloom Charbari</h3>
+          <p class="text-light">A Center for Islamic Learning and Spiritual Growth</p>
+        </div>
       </div>
       <% } %>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
     </button>
   </div>
 
   <!-- About Madrassa Section -->
   <section class="container my-5">
-    <div class="row align-items-center">
+    <div class="row align-items-center g-5">
       <div class="col-md-6">
-        <img src="/images/photos.jpg" class="img-fluid rounded shadow-sm" alt="Madrassa">
+        <img src="/images/photos.jpg" class="img-fluid rounded shadow-lg" alt="Madrassa" style="transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
       </div>
       <div class="col-md-6">
-        <h2 class="fw-bold">Darul Uloom Charbari</h2>
-        <p class="lead">
-          Darul Uloom Charbari is a center of Islamic learning where students can gain strong religious knowledge and become Hafiz of the Quran.
+        <h2 class="fw-bold text-dark display-5" style="text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);">Darul Uloom Charbari</h2>
+        <p class="lead text-muted">
+          A premier institution dedicated to fostering Islamic learning, where students embark on a journey to become Hafiz of the Quran and develop profound religious knowledge.
         </p>
-        <p>
-          Our education nurtures moral values, spiritual growth, and intellectual development, preparing students to be knowledgeable and righteous members of society.
+        <p class="text-dark">
+          Our education system nurtures moral values, spiritual growth, and intellectual excellence, preparing students to be compassionate and knowledgeable leaders in society.
         </p>
+        <a href="/admission" class="btn btn-primary px-4 py-2" style="border-radius: 15px; background: linear-gradient(90deg, #ff416c, #ff4b2b); border: none;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Apply Now</a>
       </div>
     </div>
   </section>
 
   <!-- Islamic Education & Guidance Section -->
-  <section class="bg-light py-5">
+  <section class="py-5" style="background: linear-gradient(145deg, #e6f0fa, #ffffff);">
     <div class="container">
-      <h2 class="text-center mb-4">Islamic Learning & Guidance</h2>
+      <h2 class="text-center mb-5 fw-bold display-5" style="color: #1e3c72; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);">Islamic Learning & Guidance</h2>
       <div class="row g-4">
         <% const teachings = [
           { text: "Seek knowledge from cradle to grave. (Sahih al-Bukhari)" },
@@ -57,13 +64,13 @@
 
         <% teachings.forEach((t, idx) => { %>
         <div class="col-md-6">
-          <div class="card h-100 shadow-sm p-2">
+          <div class="card h-100 shadow-lg p-3 border-0" style="background: #ffffff; border-radius: 15px; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
             <div class="d-flex align-items-center">
               <div class="flex-shrink-0 me-3">
-                <span class="fs-2 text-primary">📖</span>
+                <span class="fs-2 text-primary"><i class="bi bi-book-fill"></i></span>
               </div>
               <div>
-                <p class="mb-0"><%= t.text %></p>
+                <p class="mb-0 text-dark fw-medium"><%= t.text %></p>
               </div>
             </div>
           </div>
@@ -74,26 +81,185 @@
   </section>
 
   <!-- Dua & Daily Learning Section -->
-  <section class="container my-5">
-    <h2 class="text-center mb-4">Dua & Everyday Islamic Learning</h2>
-    <div class="row align-items-center">
-      <div class="col-md-6 order-md-2">
-        <img src="/images/section12.jpg" class="img-fluid rounded shadow-sm" alt="Dua & Learning">
-      </div>
-      <div class="col-md-6 order-md-1">
-        <p class="lead">
-          Learning in Islam strengthens faith, character, and knowledge. Daily practices, supplications, and madrassa education guide students towards excellence.
-        </p>
-        <ul>
-          <li>Education brings reward in this life and the Hereafter.</li>
-          <li>Islamic knowledge helps live a righteous life.</li>
-          <li>Develops good morals, discipline, and ethics.</li>
-          <li>Participation in social and learning activities enhances growth.</li>
-        </ul>
+<section class="container my-5 py-5" style="background: linear-gradient(145deg, #ffffff, #e6f0fa); border-radius: 20px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);">
+  <h2 class="text-center mb-5 fw-bold display-4" style="color: #1e3c72; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);">
+    Din & Everyday Islamic Learning
+  </h2>
+  <div class="row align-items-center g-5">
+    <div class="col-md-6 order-md-2">
+      <div class="position-relative overflow-hidden rounded shadow-lg" style="transition: transform 0.3s ease;">
+        <img 
+          src="/images/section12.jpg" 
+          class="img-fluid" 
+          alt="Dua & Learning" 
+          style="transition: transform 0.5s ease;"
+          onmouseover="this.style.transform='scale(1.1)'"
+          onmouseout="this.style.transform='scale(1)'"
+        >
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(45deg, rgba(255, 65, 108, 0.1), rgba(255, 255, 255, 0.2)); opacity: 0.5;"></div>
       </div>
     </div>
-  </section>
+    <div class="col-md-6 order-md-1">
+      <p class="lead text-dark fw-medium" style="font-size: 1.2rem; line-height: 1.6;">
+        Islamic learning fortifies faith, character, and wisdom. Through daily supplications and structured madrassa education, students are guided toward spiritual enlightenment and intellectual excellence.
+      </p>
+      <ul class="list-unstyled mt-4">
+        <li class="mb-3 d-flex align-items-center">
+          <i class="bi bi-check-circle-fill text-primary me-3" style="font-size: 1.5rem;"></i>
+          <span>Education yields rewards in this life and the Hereafter.</span>
+        </li>
+        <li class="mb-3 d-flex align-items-center">
+          <i class="bi bi-check-circle-fill text-primary me-3" style="font-size: 1.5rem;"></i>
+          <span>Islamic knowledge fosters a righteous and fulfilling life.</span>
+        </li>
+        <li class="mb-3 d-flex align-items-center">
+          <i class="bi bi-check-circle-fill text-primary me-3" style="font-size: 1.5rem;"></i>
+          <span>Cultivates strong morals, discipline, and ethical values.</span>
+        </li>
+        <li class="d-flex align-items-center">
+          <i class="bi bi-check-circle-fill text-primary me-3" style="font-size: 1.5rem;"></i>
+          <span>Promotes social and learning activities for holistic growth.</span>
+        </li>
+      </ul>
+      <a 
+        href="/contact/help" 
+        class="btn btn-outline-primary px-5 py-3 mt-4" 
+        style="border-radius: 15px; border: 2px solid #ff416c; color: #ff416c; font-weight: 600; transition: all 0.3s ease;"
+        onmouseover="this.style.background='linear-gradient(90deg, #ff416c, #ff4b2b)'; this.style.color='#fff'; this.style.boxShadow='0 5px 15px rgba(255, 65, 108, 0.4)';"
+        onmouseout="this.style.background='transparent'; this.style.color='#ff416c'; this.style.boxShadow='none';"
+      >
+        Learn More
+      </a>
+    </div>
+  </div>
+</section>
 
-</div>
+<style>
+  body {
+    font-family: 'Roboto Slab', serif;
+  }
+
+  section {
+    transition: all 0.3s ease;
+  }
+
+  section:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .lead {
+    transition: color 0.3s ease;
+  }
+
+  .list-unstyled li {
+    transition: transform 0.3s ease;
+  }
+
+  .list-unstyled li:hover {
+    transform: translateX(10px);
+  }
+
+  @media (max-width: 768px) {
+    .display-4 {
+      font-size: 2rem;
+    }
+
+    .lead {
+      font-size: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      font-size: 0.9rem;
+    }
+
+    img {
+      max-height: 300px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    section {
+      padding: 2rem 1.5rem;
+    }
+
+    .display-4 {
+      font-size: 1.8rem;
+    }
+
+    .list-unstyled li {
+      font-size: 0.9rem;
+    }
+  }
+</style>
 
 <%- include('footer') %>
+
+<style>
+  body {
+    font-family: 'Roboto Slab', serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298, #0f2027);
+    min-height: 100vh;
+  }
+
+  .carousel-caption {
+    transition: opacity 0.3s ease;
+  }
+
+  .carousel-item img {
+    filter: brightness(0.8);
+    transition: filter 0.3s ease;
+  }
+
+  .carousel-item:hover img {
+    filter: brightness(1);
+  }
+
+  .card {
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary, .btn-outline-primary {
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover, .btn-outline-primary:hover {
+    box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .carousel-item img {
+      height: 400px;
+    }
+
+    h2.display-5 {
+      font-size: 2rem;
+    }
+
+    .lead {
+      font-size: 1rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1.5rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .carousel-item img {
+      height: 300px;
+    }
+
+    .carousel-caption h3 {
+      font-size: 1.2rem;
+    }
+
+    .carousel-caption p {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">

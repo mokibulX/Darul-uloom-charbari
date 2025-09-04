@@ -7,9 +7,10 @@
   <div class="card p-4 shadow-lg" style="max-width: 400px; border-radius: 15px;">
     <h4 class="text-center mb-3">Application Status</h4>
     <p><b>Name:</b> <%= user.name %></p>
-    <p><b>Class:</b> <%= user.class %></p>
+   <p><b>Class:</b> <%= user.classId ? user.classId.name : "Not Assigned" %></p>
     <p><b>Phone:</b> <%= user.phone %></p>
     <p><b>Status:</b> 
+     
       <% if(user.status === "pending"){ %>
         <span class="badge bg-warning text-dark">Pending</span>
       <% } else if(user.status === "accepted"){ %>

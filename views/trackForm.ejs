@@ -1,14 +1,60 @@
 <%- include('header') %>
-<body> 
-    <div class="d-flex justify-content-center min-vh-50 ">
-  <div class="card p-4 shadow-lg" style="max-width: 400px; border-radius: 15px;">
-    <h4 class="text-center mb-3">Track Your Application</h4>
-    <form action="/track" method="POST">
-      <input type="text" name="applicationId" class="form-control mb-3" placeholder="Enter Application ID" required>
-      <button class="btn btn-primary w-100">Check Status</button>
-    </form>
+<body style="background: linear-gradient(135deg, #e3f2fd, #f1f8e9); min-height: 100vh;">
+
+  <div class="d-flex justify-content-center align-items-center min-vh-100 p-3">
+    <div class="card shadow-lg border-0 w-100" style="max-width: 420px; border-radius: 22px; background: #ffffff;">
+      
+      <!-- Header -->
+      <div class="card-body p-4 p-md-5">
+        <div class="text-center mb-4">
+          <div class="mb-3">
+            <i class="bi bi-search text-primary" style="font-size: 2.5rem;"></i>
+          </div>
+          <h3 class="fw-bold" style="color:#0d47a1;">Track Your Application</h3>
+          <p class="text-muted mb-0">Enter your Application ID below</p>
+        </div>
+
+        <!-- Form -->
+        <form action="/track" method="POST" class="needs-validation" novalidate>
+          <div class="mb-4">
+            <input 
+              type="text" 
+              name="applicationId" 
+              class="form-control form-control-lg shadow-sm" 
+              placeholder="🔑 Enter Application ID" 
+              required
+              style="border-radius: 14px;"
+            >
+            <div class="invalid-feedback">Please enter your Application ID.</div>
+          </div>
+          <div class="d-grid">
+            <button class="btn btn-gradient btn-lg fw-bold text-white shadow-sm" style="border-radius: 30px; background: linear-gradient(135deg, #0d47a1, #42a5f5);">
+              🔍 Check Status
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-  </div>
-   <%- include('footer') %>
+
+  <%- include('footer') %>
+
+  <script>
+    // Bootstrap validation
+    (function () {
+      'use strict';
+      var forms = document.querySelectorAll('.needs-validation');
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+    })();
+  </script>
 </body>
 </html>

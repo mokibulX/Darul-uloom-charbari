@@ -1,7 +1,7 @@
 <%- include('header') %>
 <style>
   body {
-    background: #eceff1;
+    background: #eaf3fb;
     font-family: 'Poppins', sans-serif;
   }
 
@@ -9,179 +9,236 @@
     width: 3.5in;
     height: 2.25in;
     background: #fff;
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    border: 2px solid #0b6b77;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    margin: 10px;
+    display: inline-block;
+    vertical-align: top;
+    border: 2px solid #0077b6;
     position: relative;
   }
 
-  /* Top Bar */
+  /* Header */
   .id-top {
-    height: 55px;
-    background: linear-gradient(135deg, #004d61, #009688);
-    position: relative;
+    height: 45px;
+    background: linear-gradient(135deg, #0077b6, #023e8a);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 0 12px;
+    justify-content: center;
     color: #fff;
+    text-align: center;
+    position: relative;
+    padding-top: 4px;
   }
   .id-top h3 {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     margin: 0;
+    text-transform: uppercase;
   }
-.id-logo {
-  position: absolute;
-  top: 5px;
-  right: 12px;
-  width: 16%;   /* card width-এর 15% */
-  height: auto;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-
+  .id-top p {
+    font-size: 11px;
+    margin: 0;
+    font-weight: 500;
+  }
+  .id-logo {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
 
   /* Body */
   .id-body {
+    padding: 10px 14px;
+    font-size: 11px;
     display: flex;
-    padding: 8px 10px;
+    gap: 12px;
+    height: calc(100% - 70px);
+    align-items: center;
+    position: relative;
   }
+
+  /* Photo */
   .id-photo-wrapper {
-    flex: 0 0 90px;
+    flex: 0 0 80px;
     position: relative;
   }
   .id-photo {
-    width: 80px;
-    height: 95px;
-    border-radius: 8px;
-    border: 2px solid #0b6b77;
+    width: 75px;
+    height: 90px;
+    border-radius: 10px;
+    border: 2px solid #0077b6;
     object-fit: cover;
   }
   .id-seal {
     position: absolute;
-    bottom: -8px;
-    right: -12px;
+    bottom: -12px;
+    right: -18px;
     width: 55px;
-    opacity: 0.7;
+    height: 55px;
+    opacity: 0.8;
+    object-fit: contain;
   }
 
-  /* Details */
-  .id-details {
+  /* Details – front */
+  .id-details-front {
+    text-align: left;
+    font-weight: 600;
+    color: #023e8a;
+    line-height: 1.6em;
     flex: 1;
-    margin-left: 9px;
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 2px 5px;
-    align-items: start;
   }
-  .id-details p {
-    margin: 0;
-    font-size: 10px;
+  .id-details-front span {
+    color: #222;
     font-weight: 500;
-    line-height: 1;
-    color: #002f34;
-    white-space: nowrap;
   }
-  .id-details p span {
-    font-weight: 700;
-    color: #000;
-    min-width: 35px;
-    display: inline-block;
+
+  /* Signature */
+  .id-signature {
+    position: absolute;
+    bottom: 28px;
+    right: 14px;
+    text-align: center;
+  }
+  .id-signature img {
+    width: 70px;
+    height: 25px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 2px;
+  }
+  .id-signature p {
+    font-size: 9px;
+    font-weight: 600;
+    margin: 0;
+    color: #023e8a;
+  }
+
+  /* Details – back */
+  .id-details-back {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 20px;
+    width: 100%;
+    font-size: 11px;
+    margin-top: 10px;
+  }
+  .id-details-back div {
+    font-weight: 600;
+    color: #023e8a;
+  }
+  .id-details-back span {
+    font-weight: 500;
+    color: #222;
   }
 
   /* Footer */
   .id-footer {
-    height: 45px;
-    background: linear-gradient(135deg, #006064, #004d40);
+    height: 25px;
+    background: linear-gradient(135deg, #0077b6, #023e8a);
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     color: #fff;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
+    letter-spacing: 0.5px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-
-  /* Signature */
-  .signature {
-    position: absolute;
-    bottom: 14px;
-    right: 20px;
-    width: 75px;
-    opacity: 0.85;
-  }
-
-  /* Download Button */
-  .download-btn {
-    margin-top: 18px;
   }
 </style>
 
 <body>
   <div class="d-flex flex-column justify-content-center align-items-center vh-100">
 
-    <!-- ID Card -->
-    <div id="idCard" class="id-card">
-      <!-- Top -->
-      <div class="id-top">
-        <h3>Darul Uloom Charbari(Gazarikandi)</h3><br>
-        <img src="/images/logo.png" class="id-logo" alt="Logo" width="100" height="100">
-        
-      </div>
-
-      <!-- Body -->
-      <div class="id-body">
-        <div class="id-photo-wrapper">
-          <img src="<%= user.image %>" class="id-photo" alt="Photo">
-          <img src="/images/seal.png" class="id-seal" alt="Seal">
+    <div id="idCardsWrapper">
+      <!-- FRONT CARD -->
+      <div id="idCardFront" class="id-card">
+        <div class="id-top">
+          <h3>Identity Card</h3>
+          <p>Darul Uloom Charbari (Gazarikandi)</p>
+          <img src="/images/logo.png" class="id-logo" alt="Logo">
         </div>
-        <div class="id-details">
-          <p><span>Name:</span> <%= user.name %></p>
-          <p><span>Father:</span> <%= user.sonOf %></p>
-          <p><span>Class:</span> <%= user.class %></p>
-          <p><span>DOB:</span> <%= user.dateOfbrith %></p>
-          <p><span>Vill:</span> <%= user.vill %></p>
-          <p><span>PO:</span> <%= user.post %></p>
-          <p><span>Dist:</span> <%= user.distric %></p>
-          <p><span>State:</span> <%= user.state %></p>
+
+        <div class="id-body">
+          <div class="id-photo-wrapper">
+            <img src="<%= user.image %>" class="id-photo" alt="Photo">
+            <img src="/images/seal.png" class="id-seal" alt="Seal">
+          </div>
+          <div class="id-details-front">
+            Name: <span><%= user.name %></span><br>
+            Class: <span><%= user.classId ? user.classId.name : "Not Assigned" %></span><br>
+            DOB: <span><%= user.dateOfbrith %></span><br>
+            ID No: <span><%= user.applicationId %></span>
+          </div>
+
+          <!-- Signature -->
+          <div class="id-signature">
+            <img src="<%= user.signature %>" alt="Signature">
+            <p>Muhtamim Signature</p>
+          </div>
+        </div>
+
+        <div class="id-footer">
+          Issue: <%= new Date().toLocaleDateString() %> | Exp: <%= new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString() %>
         </div>
       </div>
 
-      <!-- Footer -->
-      <div class="id-footer">
-        <div>ID No: <%= user.idno %></div>
-        <div>Issue: <%= new Date().toLocaleDateString() %> | Exp: <%= new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString() %></div>
-      </div>
+      <!-- BACK CARD -->
+      <div id="idCardBack" class="id-card">
+        <div class="id-top">
+          <h3>Student Details</h3>
+        </div>
 
-      <!-- Signature -->
-      <img src="/images/sign.png" class="signature" alt="Signature">
+        <div class="id-body">
+          <div class="id-details-back">
+            <div>Name: <span><%= user.name %></span></div>
+            <div>Post: <span><%= user.post %></span></div>
+            <div>Father: <span><%= user.sonOf %></span></div>
+            <div>District: <span><%= user.distric %></span></div>
+            <div>Village: <span><%= user.vill %></span></div>
+            <div>State: <span><%= user.state %></span></div>
+          </div>
+        </div>
+
+        <div class="id-footer">
+          Issued by Darul Uloom Charbari (Gazarikandi)
+        </div>
+      </div>
     </div>
 
     <!-- Download Button -->
-    <div class="download-btn">
-      <button class="btn btn-success btn-sm" onclick="downloadID()">⬇️ Download Premium ID</button>
+    <div class="download-btn mt-3">
+      <button class="btn btn-success btn-sm fw-bold shadow" onclick="downloadPDF()">⬇️ Download ID (PDF)</button>
     </div>
   </div>
 
- 
+  <!-- Load html2canvas + jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
-    function downloadID() {
-      const card = document.getElementById("idCard");
-      html2canvas(card, { scale: 4, backgroundColor: "#fff" }).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "id-card-premium.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("landscape", "in", [7.5, 2.5]);
+
+      const cards = document.getElementById("idCardsWrapper");
+      const canvas = await html2canvas(cards, { scale: 4, backgroundColor: "#fff", useCORS: true });
+
+      const imgData = canvas.toDataURL("image/png", 1.0);
+      pdf.addImage(imgData, "PNG", 0, 0, 7.5, 2.5);
+      pdf.save("id-cards.pdf");
     }
   </script>
 
-   <%- include('footer') %>
+<%- include('footer') %>
 </body>
 </html>
+  

@@ -1,90 +1,134 @@
-<%- include('header') %>
-<style>
-  body { background: #f8f9fa; font-family: "Segoe UI", sans-serif; }
-  h2 { font-weight: bold; margin-bottom: 30px; }
-  .rule-box {
-    border-left: 5px solid #0d6efd;
-    background: #fff;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  .rule-num { font-weight: bold; color: #0d6efd; }
-  .btn-submit { margin-top: 20px; }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admission Rules & Regulations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <style>
+    .rule-box {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: linear-gradient(145deg, #ffffff, #f1f5f9);
+    }
+    .rule-box:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #1e40af 0%, #60a5fa 100%);
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-submit:hover {
+      background: linear-gradient(135deg, #14532d 0%, #16a34a 100%);
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .rule-text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-gray-50 to-gray-200 font-sans antialiased">
+  <!-- Header -->
 
-<div class="container my-5">
-
-  <!-- English Rules -->
-  <h2 class="text-center">Admission Rules & Regulations</h2>
-  <% const rules = [
-    "The filling of form must be clear and unsuspicious.",
-    "Students must be present on time. Mobile phones are strictly prohibited.",
-    "Non-local residents must take permission from the Madrasa authority.",
-    "Madrasa Darul Uloom is a religious and ethical institute.",
-    "Students found visiting fairs or cinema will be expelled.",
-    "Namaaz with congregation must be offered on proper time.",
-    "Teachers, Madrasa authorities, and Islamic scholars must be respected.",
-    "Discipline must be maintained, and quarrels are prohibited.",
-    "Students must stay only in the allotted place.",
-    "No guest or outsider can stay with you without permission."
-  ]; %>
-
-  <% rules.forEach((rule, index) => { %>
-    <div class="rule-box">
-      <span class="rule-num"><%= index+1 %>. </span> <%= rule %>
+  <div class="container mx-auto px-4 py-16">
+    <!-- English Rules -->
+    <h2 class="text-4xl md:text-5xl font-extrabold text-center text-indigo-900 mb-12 animate__animated animate__fadeIn">
+      Admission Rules & Regulations
+    </h2>
+    <% const rules = [
+      "The filling of form must be clear and unsuspicious.",
+      "Students must be present on time. Mobile phones are strictly prohibited.",
+      "Non-local residents must take permission from the Madrasa authority.",
+      "Madrasa Darul Uloom is a religious and ethical institute.",
+      "Students found visiting fairs or cinema will be expelled.",
+      "Namaaz with congregation must be offered on proper time.",
+      "Teachers, Madrasa authorities, and Islamic scholars must be respected.",
+      "Discipline must be maintained, and quarrels are prohibited.",
+      "Students must stay only in the allotted place.",
+      "No guest or outsider can stay with you without permission."
+    ]; %>
+    <div class="grid gap-8">
+      <% rules.forEach((rule, index) => { %>
+        <div class="rule-box bg-white p-8 rounded-xl border-l-4 border-indigo-700 shadow-xl animate__animated animate__fadeInUp" style="animation-delay: <%= index * 0.15 %>s;">
+          <div class="rule-text">
+            <span class="text-xl font-bold text-indigo-700 mr-3"><%= index+1 %>. </span>
+            <span class="text-gray-800 text-lg"><%= rule %></span>
+          </div>
+        </div>
+      <% }) %>
     </div>
-  <% }) %>
 
-  <!-- Assamese Rules -->
-  <h2 class="text-center mt-5">ভৰ্তিৰ নিয়ম আৰু চৰ্তসমূহ</h2>
-  <% const rules_as = [
-    "ফৰ্মটো পৰিষ্কাৰভাৱে পূৰণ কৰিব লাগিব।",
-    "ছাত্ৰই সময়ত উপস্থিত থাকিব লাগিব। ম'বাইল কঠোৰভাৱে নিষিদ্ধ।",
-    "যি ছাত্ৰ স্থানীয় নহয়, তেওঁবিলাকে অনুমতি ল’ব লাগিব।",
-    "মাদ্ৰাছা ধৰ্মীয় আৰু নৈতিক প্ৰতিষ্ঠান।",
-    "মেলা বা ছিনেমালৈ গ’লে ছাত্ৰক বহিষ্কাৰ কৰা হ’ব।",
-    "জামাতেৰে নামাজ আদায় কৰিব লাগিব।",
-    "শিক্ষক আৰু মাদ্ৰাছাৰ দায়িত্বশীলসকলক সন্মান কৰিব লাগিব।",
-    "শৃংখলা বজাই ৰাখিব লাগিব, ঝগড়া কৰিব নোৱাৰিব।",
-    "ছাত্ৰক নিৰ্দিষ্ট স্থানতে থাকিব লাগিব।",
-    "অনুমতি নোহোৱাকৈ অতিথি থাকিব নোৱাৰে।"
-  ]; %>
-
-  <% rules_as.forEach((rule, index) => { %>
-    <div class="rule-box">
-      <span class="rule-num"><%= index+1 %>. </span> <%= rule %>
+    <!-- Assamese Rules -->
+    <h2 class="text-4xl md:text-5xl font-extrabold text-center text-indigo-900 mt-16 mb-12 animate__animated animate__fadeIn">
+      ভৰ্তিৰ নিয়ম আৰু চৰ্তসমূহ
+    </h2>
+    <% const rules_as = [
+      "ফৰ্মটো পৰিষ্কাৰভাৱে পূৰণ কৰিব লাগিব।",
+      "ছাত্ৰই সময়ত উপস্থিত থাকিব লাগিব। ম'বাইল কঠোৰভাৱে নিষিদ্ধ।",
+      "যি ছাত্ৰ স্থানীয় নহয়, তেওঁবিলাকে অনুমতি ল’ব লাগিব।",
+      "মাদ্ৰাছা ধৰ্মীয় আৰু নৈতিক প্ৰতিষ্ঠান।",
+      "মেলা বা ছিনেমালৈ গ’লে ছাত্ৰক বহিষ্কাৰ কৰা হ’ব।",
+      "জামাতেৰে নামাজ আদায় কৰিব লাগিব।",
+      "শিক্ষক আৰু মাদ্ৰাছাৰ দায়িত্বশীলসকলক সন্মান কৰিব লাগিব।",
+      "শৃংখলা বজাই ৰাখিব লাগিব, ঝগড়া কৰিব নোৱাৰিব।",
+      "ছাত্ৰক নিৰ্দিষ্ট স্থানতে থাকিব লাগিব।",
+      "অনুমতি নোহোৱাকৈ অতিথি থাকিব নোৱাৰে।"
+    ]; %>
+    <div class="grid gap-8">
+      <% rules_as.forEach((rule, index) => { %>
+        <div class="rule-box bg-white p-8 rounded-xl border-l-4 border-indigo-700 shadow-xl animate__animated animate__fadeInUp" style="animation-delay: <%= index * 0.15 %>s;">
+          <div class="rule-text">
+            <span class="text-xl font-bold text-indigo-700 mr-3"><%= index+1 %>. </span>
+            <span class="text-gray-800 text-lg"><%= rule %></span>
+          </div>
+        </div>
+      <% }) %>
     </div>
-  <% }) %>
 
-  <!-- Urdu Rules -->
-  <h2 class="text-center mt-5">داخلہ کے قواعد و ضوابط</h2>
-  <% const rules_ur = [
-    "فارم کو صاف اور واضح طور پر بھرنا ضروری ہے۔",
-    "طلباء وقت پر حاضر ہوں۔ موبائل فونز سختی سے ممنوع ہیں۔",
-    "غیر مقامی طلباء کو مدرسہ کی اجازت لینی ہوگی۔",
-    "مدرسہ دارالعلوم ایک مذہبی اور اخلاقی ادارہ ہے۔",
-    "میلے یا سینما جانے والے طلباء کو خارج کیا جائے گا۔",
-    "نماز جماعت کے ساتھ وقت پر ادا کریں۔",
-    "اساتذہ، مدرسہ کے اہلکار اور علماء کا احترام کریں۔",
-    "ضبط و اخلاق قائم رکھیں، جھگڑا منع ہے۔",
-    "طلباء کو صرف مخصوص جگہ پر رہنا ہوگا۔",
-    "بغیر اجازت کسی مہمان کو قیام کی اجازت نہیں۔"
-  ]; %>
-
-  <% rules_ur.forEach((rule, index) => { %>
-    <div class="rule-box">
-      <span class="rule-num"><%= index+1 %>. </span> <%= rule %>
+    <!-- Urdu Rules -->
+    <h2 class="text-4xl md:text-5xl font-extrabold text-center text-indigo-900 mt-16 mb-12 animate__animated animate__fadeIn">
+      داخلہ کے قواعد و ضوابط
+    </h2>
+    <% const rules_ur = [
+      "فارم کو صاف اور واضح طور پر بھرنا ضروری ہے۔",
+      "طلباء وقت پر حاضر ہوں۔ موبائل فونز سختی سے ممنوع ہیں۔",
+      "غیر مقامی طلباء کو مدرسہ کی اجازت لینی ہوگی۔",
+      "مدرسہ دارالعلوم ایک مذہبی اور اخلاقی ادارہ ہے۔",
+      "میلے یا سینما جانے والے طلباء کو خارج کیا جائے گا۔",
+      "نماز جماعت کے ساتھ وقت پر ادا کریں۔",
+      "اساتذہ، مدرسہ کے اہلکار اور علماء کا احترام کریں۔",
+      "ضبط و اخلاق قائم رکھیں، جھگڑا منع ہے۔",
+      "طلباء کو صرف مخصوص جگہ پر رہنا ہوگا۔",
+      "بغیر اجازت کسی مہمان کو قیام کی اجازت نہیں۔"
+    ]; %>
+    <div class="grid gap-8">
+      <% rules_ur.forEach((rule, index) => { %>
+        <div class="rule-box bg-white p-8 rounded-xl border-l-4 border-indigo-700 shadow-xl animate__animated animate__fadeInUp" style="animation-delay: <%= index * 0.15 %>s;">
+          <div class="rule-text">
+            <span class="text-xl font-bold text-indigo-700 mr-3"><%= index+1 %>. </span>
+            <span class="text-gray-800 text-lg"><%= rule %></span>
+          </div>
+        </div>
+      <% }) %>
     </div>
-  <% }) %>
 
-  <!-- Submit Button -->
-  <div class="text-center btn-submit">
-    <a href="/admission" class="btn btn-success btn-lg">
-      I have read and agree / মই পঢ়িছোঁ আৰু মঞ্জুৰ কৰিছোঁ / میں پڑھ لیا اور متفق ہوں
-    </a>
+    <!-- Submit Button -->
+    <div class="text-center mt-12">
+      <a href="/admission" class="btn-submit inline-block text-white text-xl font-bold px-10 py-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform">
+        I have read and agree / মই পঢ়িছোঁ আৰু মঞ্জুৰ কৰিছোঁ / میں پڑھ لیا اور متفق ہوں
+      </a>
+    </div>
   </div>
-</div>
 
-<%- include('footer') %>
+  <!-- Footer -->
+  <%- include('footer') %>
+</body>
+</html>

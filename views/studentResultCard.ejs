@@ -9,16 +9,19 @@
     <p class="fs-6 text-muted">
       <strong>Class:</strong> <%= classInfo ? classInfo.name : "-" %> | 
       <strong>Exam Year:</strong> <%= examYear %> | 
-      <strong>Position:</strong> <%= position || '-' %>
+      <strong>Position:</strong> <span class="badge bg-info text-dark"><%= position || '-' %></span>
     </p>
   </div>
 
   <!-- Student Info Card -->
-  <div class="card mb-4 shadow border-0 rounded-4 p-3 d-flex flex-row align-items-center">
+  <div class="card mb-4 shadow-lg border-0 rounded-4 p-4 d-flex flex-row align-items-center">
     <img src="<%= student && student.image ? student.image : '/default.png' %>" 
-         alt="Photo" class="rounded-circle border border-3 border-primary me-4" width="120" height="120" style="object-fit: cover;">
+         alt="Photo" 
+         class="rounded-circle border border-3 border-primary me-4 shadow-sm" 
+         width="120" height="120" style="object-fit: cover;">
     <div>
-      <h4 class="fw-bold text-primary mb-1"><%= student ? student.name : "Unknown" %></h4>
+      <h4 class="fw-bold text-dark mb-2">Darul Uloom Charbari Annual Exam <%= examYear %></h4>
+      <h5 class="fw-bold text-primary mb-1">👤 <%= student ? student.name : "Unknown" %></h5>
       <p class="mb-1"><strong>Application ID:</strong> <%= student ? student.applicationId : '-' %></p>
       <p class="mb-1"><strong>Class:</strong> <%= classInfo ? classInfo.name : '-' %></p>
       <p class="mb-0"><strong>Position in Class:</strong> 
@@ -28,14 +31,15 @@
   </div>
 
   <!-- Result Table -->
-  <div class="card shadow-lg border-0 rounded-4 mb-3">
+  <div class="card shadow-lg border-0 rounded-4 mb-4">
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle text-center">
-          <thead class="table-dark">
-            <tr class="text-uppercase">
-              <th>Subject / Kitab</th>
+        <table class="table table-bordered table-hover align-middle text-center mb-0">
+          <thead class="table-dark text-uppercase">
+            <tr>
+              <th>Subject</th>
               <th>Obtained Marks</th>
+              <th>Pass Marks</th>
               <th>Full Marks</th>
             </tr>
           </thead>
@@ -46,33 +50,54 @@
               <tr>
                 <td class="text-start fw-semibold"><%= sub %></td>
                 <td class="fw-bold text-primary"><%= subData ? subData.obtainedMark : '-' %></td>
+                <td>
+                  <% if (subData) { %>
+                    <% if (subData.obtainedMark >= 33) { %>
+                      <span class="badge bg-success">33</span>
+                    <% } else { %>
+                      <span class="badge bg-danger">Fail</span>
+                    <% } %>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
                 <td class="fw-semibold"><%= subData ? subData.fullMark : '-' %></td>
               </tr>
             <% }) %>
 
-            <!-- Total Row -->
+            <!-- Total Marks -->
             <tr class="table-secondary fw-bold">
               <td>Total</td>
-              <td colspan="2" class="text-primary fs-6"><%= result ? result.totalMarks : 0 %></td>
+              <td colspan="3" class="text-primary fs-6"><%= result ? result.totalMarks : 0 %></td>
             </tr>
 
-            <!-- Status Row -->
+            <!-- Status -->
             <tr class="fw-bold">
               <td>Status</td>
-              <td colspan="2">
+              <td colspan="3">
                 <% if (result && result.passFail === "Pass") { %>
-                  <span class="badge bg-success fs-6">✅ Pass</span>
+                  <span class="badge bg-success fs-6 px-3 py-2">✅ Pass</span>
+                <% } else if (result && result.passFail === "Out of Consideration") { %>
+                  <span class="badge bg-warning text-dark fs-6 px-3 py-2">⚠️ Out of Consideration</span>
                 <% } else { %>
-                  <span class="badge bg-danger fs-6">❌ Fail</span>
+                  <span class="badge bg-danger fs-6 px-3 py-2">❌ Fail</span>
                 <% } %>
               </td>
             </tr>
 
-            <!-- Division Row -->
+            <!-- Division -->
             <tr class="fw-bold">
               <td>Division</td>
-              <td colspan="2">
-                <span class="badge bg-warning text-dark fs-6"><%= result ? result.division : '-' %></span>
+              <td colspan="3">
+                <% if(result && result.division === "1st"){ %>
+                  <span class="badge bg-success fs-6 px-3 py-2">🥇 1st Division</span>
+                <% } else if(result && result.division === "2nd"){ %>
+                  <span class="badge bg-info fs-6 px-3 py-2">🥈 2nd Division</span>
+                <% } else if(result && result.division === "3rd"){ %>
+                  <span class="badge bg-secondary fs-6 px-3 py-2">🥉 3rd Division</span>
+                <% } else { %>
+                  <span class="badge bg-danger fs-6 px-3 py-2">Fail</span>
+                <% } %>
               </td>
             </tr>
           </tbody>
@@ -82,12 +107,13 @@
   </div>
 
   <!-- Action Buttons -->
-  <div class="d-grid gap-2">
-    <a href="/results/view?classId=<%= classInfo ? classInfo._id : '' %>&examYear=<%= examYear %>" 
-       class="btn btn-outline-primary fw-bold">⬅ Back to Class Results</a>
+  <div class="d-flex justify-content-center gap-3">
+  <a href="/results/view?classId=<%= classInfo._id %>&examYear=<%= examYear %>" class="btn btn-warning fw-bold px-4">
+  Back to Class Results
+</a>
 
     <a href="/student/result/<%= student._id %>/pdf?classId=<%= classInfo._id %>&examYear=<%= examYear %>" 
-       class="btn btn-warning fw-bold">📄 Download PDF</a>
+       class="btn btn-warning fw-bold px-4">📄 Download PDF</a>
   </div>
 
 </div>

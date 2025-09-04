@@ -36,8 +36,8 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
+  .then(() => console.log(" Connected to MongoDB"))
+  .catch(err => console.error(" MongoDB connection error:", err));
 
 // ---------------- Session ----------------
 app.use(
@@ -95,6 +95,13 @@ app.get("/admission", async (req, res) => {
 
 app.post("/admission", upload.single("image"), async (req, res) => {
   try {
+    const { prevClass, password } = req.body;
+
+    // Required check
+    if (!prevClass || !password) {
+      return res.send("⚠️ Error: Previous Class and Password are required!");
+    }
+
     const userData = {
       ...req.body,
       pin: Number(req.body.pin),
@@ -112,43 +119,58 @@ app.post("/admission", upload.single("image"), async (req, res) => {
     res.render("success", { applicationId: newUser.applicationId });
   } catch (err) {
     console.error(err);
-    res.send("Error submitting form: " + err.message);
+    res.send("⚠️ Error submitting form: " + err.message);
   }
 });
 
 app.get("/admission/conditions", (req, res) => res.render("admissionRules"));
 
 // ---------------- User Detail / Password ----------------
+// ---------------- User Details ----------------
 app.get("/users/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).lean();
+    const user = await User.findById(req.params.id).populate("classId").lean();
     if (!user) return res.send("User not found");
-    if (req.session.isAdmin) return res.render("detail", { user });
-    res.render("password", { id: req.params.id });
-  } catch {
-    res.send("Something went wrong");
+
+    if (req.session.isAdmin) {
+      // Admin হলে সরাসরি details দেখাবে
+      return res.render("detail", { user });
+    } else {
+      // Student হলে password form দেখাবে
+      return res.render("password", { userId: req.params.id });
+    }
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading details");
   }
 });
+
+
 
 app.post("/users/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate("classId");
     if (!user) return res.send("User not found");
 
     const isMatch = await user.comparePassword(req.body.password);
-    if (!isMatch) return res.send("Wrong password!");
+    if (!isMatch) return res.send("❌ Wrong password!");
 
-    res.render("detail", { user });
-  } catch {
-    res.render("detail", { user: {} });
+    res.render("detail", { user: user.toObject() });
+  } catch (err) {
+    console.error(err);
+    res.send("Error verifying password");
   }
 });
+
 
 // ---------------- Track ----------------
 app.get("/track", (req, res) => res.render("trackForm"));
 
 app.post("/track", async (req, res) => {
-  const user = await User.findOne({ applicationId: req.body.applicationId }).lean();
+  const user = await User.findOne({ applicationId: req.body.applicationId })
+    .populate("classId")   // 🟢 এখানে populate
+    .lean();
+
   if (!user) return res.send("Invalid Application ID!");
   res.render("trackResult", { user });
 });
@@ -156,12 +178,19 @@ app.post("/track", async (req, res) => {
 // ---------------- ID Card ----------------
 app.get("/idcard/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).lean();
-    res.render("idCard", { user });
-  } catch {
-    res.status(500).send("Error loading ID card");
+    const user = await User.findById(req.params.id)
+      .populate("classId")   // 🟢 populate করে class এর নাম আনবো
+      .lean();
+
+    if (!user) return res.send("User not found");
+
+    res.render("idcard", { user });
+  } catch (err) {
+    console.error(err);
+    res.send("Something went wrong");
   }
 });
+
 
 // ---------------- Admin ----------------
 app.get("/admin/login", (req, res) => res.render("adPassword"));
@@ -281,32 +310,88 @@ app.get("/admin/result/upload-form", isAdmin, async (req, res) => {
 });
 
 
+
+/// accept route
+
+// Accept Route
+// Accept Student
+app.post("/accept/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // User model update
+    await User.findByIdAndUpdate(id, { status: "accepted" });
+
+    // কাজ শেষে আবার admin পেজে redirect করুন
+    res.redirect("/admin"); 
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Delete Student
+app.post("/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.redirect("/admin");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
+
+
+
+// result section 
 // ---------------- Admin Result Upload POST ----------------
 app.post("/admin/result/upload", isAdmin, async (req, res) => {
   try {
     const { classId, examMonth, examYear, studentResults } = req.body;
     if (!studentResults) return res.status(400).send("No results provided");
 
+    const PASS_MARK = 33; // এখানে আপনি নিজের মতো change করতে পারবেন
+
     for (let studentId in studentResults) {
       const marksData = studentResults[studentId].marks;
       let subjects = [];
       let totalMarks = 0;
+      let failCount = 0;
 
       for (let kitab in marksData) {
         const obtained = parseInt(marksData[kitab]) || 0;
         subjects.push({ kitab, obtainedMark: obtained, fullMark: 100 });
         totalMarks += obtained;
+
+        if (obtained < PASS_MARK) {
+          failCount++;
+        }
       }
 
-      const passFail = subjects.every(s => s.obtainedMark >= 40) ? "Pass" : "Fail";
-      const percentage = subjects.length ? (totalMarks / (subjects.length * 100)) * 100 : 0;
+      // ✅ Pass/Fail/Out of Consideration Logic
+      let passFail = "Fail";
+      if (failCount === 0) {
+        passFail = "Pass";
+      } else if (failCount === 1) {
+        passFail = "Out of Consideration";
+      } else {
+        passFail = "Fail";
+      }
+
+      // 🔹 Division calculation (Pass OR Out of Consideration হলে হিসাব হবে)
+      const percentage = subjects.length
+        ? (totalMarks / (subjects.length * 100)) * 100
+        : 0;
+
       let division = "Fail";
-      if (passFail === "Pass") {
+      if (passFail === "Pass" || passFail === "Out of Consideration") {
         if (percentage >= 60) division = "1st";
         else if (percentage >= 45) division = "2nd";
         else division = "3rd";
       }
 
+      // আগের result থাকলে delete করে নতুনটা save করব
       await Result.findOneAndDelete({ classId, studentId, examMonth, examYear });
 
       await Result.create({
@@ -317,16 +402,33 @@ app.post("/admin/result/upload", isAdmin, async (req, res) => {
         passFail,
         division,
         examMonth,
-        examYear
+        examYear,
       });
     }
 
-    res.redirect(`/results/view/${classId}?examMonth=${examMonth}&examYear=${examYear}`);
+    res.redirect(
+      `/results/view/${classId}?examMonth=${examMonth}&examYear=${examYear}`
+    );
   } catch (err) {
     console.error(err);
     res.status(500).send("Error uploading results");
   }
 });
+
+
+
+app.get("/results/view/:classId", (req, res) => {
+  const { classId } = req.params;
+  const { examYear, examMonth } = req.query; 
+  const parts = new URLSearchParams();
+  parts.set("classId", classId);
+  if (examYear)  parts.set("examYear", examYear);
+  if (examMonth) parts.set("examMonth", examMonth);
+
+  return res.redirect(`/results/view?${parts.toString()}`);
+});
+
+
 
 // ---------------- View Class Result ----------------
 
