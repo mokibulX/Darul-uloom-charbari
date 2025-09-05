@@ -1,144 +1,147 @@
- <!-- Bootstrap CSS and other links assumed in header.ejs -->
-  <style>
-    body {
-      font-family: 'Roboto Slab', serif;
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      min-height: 100vh;
-    }
-    .container {
-      background: linear-gradient(145deg, #ffffff, #f8f9fa);
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-      padding: 2rem;
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-    }
-    h2 {
-      color: #1a2a6c;
-      font-weight: 700;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .table {
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    .table thead {
-      background: linear-gradient(90deg, #1a2a6c, #2c3e50);
-      color: #ffd700;
-    }
-    .table th, .table td {
-      vertical-align: middle;
-      text-align: center;
-      padding: 1rem;
-    }
-    .table-striped tbody tr:nth-of-type(odd) {
-      background: #f8f9fa;
-    }
-    .table-warning {
-      background: #fff3cd !important;
-      transition: background 0.3s ease;
-    }
-    .table-success {
-      background: #d1e7dd !important;
-      transition: background 0.3s ease;
-    }
-    .table tr:hover {
-      background: rgba(255, 215, 0, 0.1);
-      transform: translateY(-2px);
-      transition: all 0.3s ease;
-    }
-    .btn-primary {
-      background: linear-gradient(90deg, #1a2a6c, #2c3e50);
-      border: none;
-      transition: all 0.3s ease;
-    }
-    .btn-primary:hover {
-      background: linear-gradient(90deg, #2c3e50, #1a2a6c);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    .btn-success {
-      background: linear-gradient(90deg, #28a745, #20c997);
-      border: none;
-      transition: all 0.3s ease;
-    }
-    .btn-success:hover {
-      background: linear-gradient(90deg, #218838, #1a8f6d);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    .btn-warning {
-      background: linear-gradient(90deg, #ffc107, #ffca2c);
-      border: none;
-      transition: all 0.3s ease;
-    }
-    .btn-warning:hover {
-      background: linear-gradient(90deg, #e0a800, #f1c40f);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    .btn-danger {
-      background: linear-gradient(90deg, #dc3545, #c82333);
-      border: none;
-      transition: all 0.3s ease;
-    }
-    .btn-danger:hover {
-      background: linear-gradient(90deg, #c82333, #a71d2a);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    a.table-link {
-      color: #1a2a6c;
-      font-weight: 500;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    a.table-link:hover {
-      color: #ffd700;
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <%- include('header') %>
-  <div class="container mt-4 animate__animated animate__fadeIn">
-    <h2 class="text-center mb-4 animate__animated animate__fadeInDown">
-      Admin Panel - Student Details
-      <a href="/admin/classes" class="btn btn-primary btn-sm ms-2">Add New Class</a>
-      <a href="/admin/result/upload" class="btn btn-primary btn-sm ms-2">Upload Results</a>
-    </h2>
-    <table class="table table-bordered table-striped text-center">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Class</th>
-          <th>Phone</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% users.forEach(user => { %>
-          <tr class="<%= user.status === 'pending' ? 'table-warning' : 'table-success' %> animate__animated animate__fadeInUp" style="animation-delay: <%= users.indexOf(user) * 0.1 %> s;">
-            <td><a href="/users/<%= user._id %>" class="table-link"><%= user.name %></a></td>
-            <td><%= user.classId ? user.classId.name : "Not Assigned" %></td>
-            <td><%= user.phone %></td>
-            <td><%= user.status %></td>
-            <td>
-              <% if (user.status === "pending") { %>
-                <form action="/accept/<%= user._id %>" method="POST" style="display:inline;">
-                  <button type="submit" class="btn btn-success btn-sm">Accept</button>
-                </form>
-              <% } %>
-              <a href="/edit/<%= user._id %>" class="btn btn-warning btn-sm">Edit</a>
-              <form action="/delete/<%= user._id %>" method="POST" style="display:inline;">
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+<%- include('header') %>
+
+<style>
+  body {
+    font-family: 'Roboto Slab', serif;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    min-height: 100vh;
+  }
+  .container {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  h2 {
+    color: #1a2a6c;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  .table thead {
+    background: linear-gradient(90deg, #1a2a6c, #2c3e50);
+    color: #ffd700;
+  }
+  .table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 1rem;
+  }
+  .table-striped tbody tr:nth-of-type(odd) {
+    background: #f8f9fa;
+  }
+  .table-warning {
+    background: #fff3cd !important;
+    transition:  0.3s ease;
+  }
+  .table-success {
+    background: #d1e7dd !important;
+    transition: 0.3s ease;
+  }
+  .table tr:hover {
+    background: rgba(255, 215, 0, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, #1a2a6c, #2c3e50);
+    border: none;
+    transition: all 0.3s ease;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(90deg, #2c3e50, #1a2a6c);
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .btn-success {
+    background: linear-gradient(90deg, #28a745, #20c997);
+    border: none;
+    transition: all 0.3s ease;
+  }
+  .btn-success:hover {
+    background: linear-gradient(90deg, #218838, #1a8f6d);
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .btn-warning {
+    background: linear-gradient(90deg, #ffc107, #ffca2c);
+    border: none;
+    transition: all 0.3s ease;
+  }
+  .btn-warning:hover {
+    background: linear-gradient(90deg, #e0a800, #f1c40f);
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .btn-danger {
+    background: linear-gradient(90deg, #dc3545, #c82333);
+    border: none;
+    transition: all 0.3s ease;
+  }
+  .btn-danger:hover {
+    background: linear-gradient(90deg, #c82333, #a71d2a);
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  a.table-link {
+    color: #1a2a6c;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  a.table-link:hover {
+    color: #ffd700;
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container mt-4 animate__animated animate__fadeIn">
+  <h2 class="text-center mb-4 animate__animated animate__fadeInDown">
+    Admin Panel - Student Details
+    <a href="/admin/classes" class="btn btn-primary btn-sm ms-2">Add New Class</a>
+    <a href="/admin/result/upload" class="btn btn-primary btn-sm ms-2">Upload Results</a>
+  </h2>
+
+  <table class="table table-bordered table-striped text-center">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Class</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach((user, index) => { %>
+        <tr class="<%= user.status === 'pending' ? 'table-warning' : 'table-success' %> animate__animated animate__fadeInUp" style="animation-delay: <%= index * 0.1 %>s;">
+          <td>
+            <a href="/users/<%= user._id %>" class="table-link"><%= user.name %></a>
+          </td>
+          <td><%= user.classId ? user.classId.name : "Not Assigned" %></td>
+          <td><%= user.phone %></td>
+          <td><%= user.status %></td>
+          <td>
+            <% if (user.status === "pending") { %>
+              <form action="/accept/<%= user._id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-success btn-sm">Accept</button>
               </form>
-            </td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
-</body>
+            <% } %>
+            <a href="/edit/<%= user._id %>" class="btn btn-warning btn-sm">Edit</a>
+            <form action="/delete/<%= user._id %>" method="POST" style="display:inline;">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('footer') %>
